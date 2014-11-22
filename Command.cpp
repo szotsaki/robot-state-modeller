@@ -1,20 +1,24 @@
 #include "Command.h"
 
 template<typename T>
-void Command<T>::serialise(QDataStream& stream)
+void Command<T>::serialise(QDataStream &outStream)
 {
-
+    outStream << value;
+    progress = kCp_InProgress;
 }
 
 template<typename T>
-void Command<T>::update(T state)
+void Command<T>::update(const T &value)
 {
-
+    if (progress == kCp_InProgress
+        && value == this->value)
+    {
+        progress = kCp_Success;
+    }
 }
 
 template<typename T>
 bool Command<T>::inProgess()
 {
-    bool placeholder;
-    return placeholder;
+    return progress == kCp_InProgress;
 }

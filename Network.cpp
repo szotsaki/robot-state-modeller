@@ -1,6 +1,6 @@
 #include "Network.h"
 
-void Network::send(dataID_t dataID)
+void Network::send()
 {
 
 }
@@ -21,13 +21,13 @@ void Network::onReceive()
 
 }
 
-QDataStream& Network::getSendStream() const
+QDataStream & Network::getSendStream() const
 {
     QDataStream placeholder;
     return placeholder;
 }
 
-QDataStream& Network::getReceiveStream() const
+QDataStream & Network::getReceiveStream() const
 {
     QDataStream placeholder;
     return placeholder;

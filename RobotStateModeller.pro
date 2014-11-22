@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     Data.cpp \
     Command.cpp \
     DataStateOnly.cpp \
-    State.cpp
+    State.cpp \
+    DataInterface.cpp
 
 HEADERS  += \
     Command.h \
@@ -34,10 +35,9 @@ HEADERS  += \
     DataStateOnly.h \
     Monitor.h \
     Network.h \
-    progress_t.h \
     State.h \
     MainWindow.h \
-    dataID_t.h
+    QCircularBuffer.h
 
 FORMS    += \
     MainWindow.ui

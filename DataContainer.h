@@ -10,16 +10,15 @@ class DataContainer
 {
 
 public:
-    DataInterface *dataInterface;
 
 	DataContainer();
     ~DataContainer();
-	void receive(int ID, QDataStream& stream);
-	void sendCommand(int ID, QDataStream& stream);
-	void sync(QDataStream& stream);
+    void receive(const dataId_t dataId, QDataStream &inStream);
+    void sendCommand(const dataId_t dataId, QDataStream &outStream);
+    void sync(QDataStream &outStream);
 
 private:
-    const std::array<DataInterface, 0> data;
+    const std::array<DataInterface *, 0> data;
 
 };
 #endif // DATA_CONTAINER_H_

@@ -4,14 +4,12 @@
 #include <QDataStream>
 #include <QTcpSocket>
 
-#include "dataID_t.h"
-
 class Network : QObject
 {
     Q_OBJECT
 
 public:
-    void send(dataID_t dataID);
+    void send();
 	void disconnect();
 	bool connected();
     QDataStream& getSendStream() const;

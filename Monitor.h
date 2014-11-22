@@ -3,18 +3,19 @@
 
 #include "DataContainer.h"
 #include "Network.h"
-#include "Command.h"
 
 class Monitor
 {
 
 public:
+
+    void receive();
+    void send(const dataId_t dataId);
+    void sync();
+
+private:
     DataContainer dataContainer;
     Network network;
-
-	void receive();
-    void send(int ID);
-	void sync();
 
 };
 #endif // MONITOR_H_

@@ -1,19 +1,23 @@
 #include "DataCommandOnly.h"
 
 template <typename T>
-void DataCommandOnly<T>::sendCommand(QDataStream& stream, bool onlyInProgress)
+void DataCommandOnly<T>::sendCommand(QDataStream &outStream,
+                                     const bool onlyInProgress)
 {
-
+    if (!onlyInProgress || command.inProgess())
+    {
+        command.serialise(outStream);
+    }
 }
 
 template <typename T>
-void DataCommandOnly<T>::deserialise(QDataStream& stream)
+void DataCommandOnly<T>::deserialise(QDataStream &)
 {
-
+    // No states, nothing to do.
 }
 
 template <typename T>
-void DataCommandOnly<T>::updateCommand(State<T> &state)
+void DataCommandOnly<T>::updateCommand()
 {
-
+    // No states, nothing to update with.
 }
