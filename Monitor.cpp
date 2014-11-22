@@ -20,3 +20,8 @@ void Monitor::sync()
     dataContainer.sync(network.getSendStream());
     network.send();
 }
+
+void Monitor::emergencyStop()
+{
+
+}
