@@ -4,9 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui widgets network printsupport
 
 QMAKE_CXXFLAGS += -std=c++11
 
@@ -23,7 +21,8 @@ SOURCES += main.cpp\
     Data.cpp \
     Command.cpp \
     DataStateOnly.cpp \
-    State.cpp
+    State.cpp \
+    QCustomPlot.cpp
 
 HEADERS  += \
     Command.h \
@@ -37,7 +36,8 @@ HEADERS  += \
     progress_t.h \
     State.h \
     MainWindow.h \
-    dataID_t.h
+    dataID_t.h \
+    QCustomPlot.h
 
 FORMS    += \
     MainWindow.ui

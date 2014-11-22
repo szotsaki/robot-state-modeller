@@ -106,6 +106,29 @@
        <attribute name="title">
         <string>Diagrams</string>
        </attribute>
+       <widget class="QCustomPlot" name="widget" native="true">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>100</y>
+          <width>371</width>
+          <height>251</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>360</x>
+          <y>60</y>
+          <width>59</width>
+          <height>14</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Teszt</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -139,6 +162,14 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>QCustomPlot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
