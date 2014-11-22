@@ -15,3 +15,8 @@ void Monitor::sync()
 {
 
 }
+
+void Monitor::emergencyStop()
+{
+
+}
