@@ -5,9 +5,9 @@
 
 enum class commandProgress_t
 {
-    kCp_InProgress,
-    kCp_Success,
-    kCp_Failed
+    kInProgress,
+    kSuccess,
+    kFailed
 };
 
 /**

@@ -30,6 +30,8 @@ class DataInterface
 {
 
 public:
+    virtual ~DataInterface();
+
     virtual void sendCommand(QDataStream &outStream,
                              const bool onlyInProgress = false) = 0;
     virtual void deserialise(QDataStream &inStream) = 0;

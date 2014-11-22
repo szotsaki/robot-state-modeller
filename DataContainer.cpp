@@ -27,5 +27,6 @@ void DataContainer::sendCommand(const dataId_t dataId, QDataStream &outStream)
 
 void DataContainer::sync(QDataStream &outStream)
 {
-
+    outStream;  // silent unused warning.
+    // TODO: implement.
 }

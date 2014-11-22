@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     Command.cpp \
     DataStateOnly.cpp \
     State.cpp \
-    DataInterface.cpp
+    DataInterface.cpp \
+    QCustomPlot.cpp
     QCustomPlot.cpp
 
 HEADERS  += \
