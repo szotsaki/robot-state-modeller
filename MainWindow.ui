@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>818</width>
-    <height>524</height>
+    <width>808</width>
+    <height>514</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Robot state modeller</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="Icons.qrc">
+    <normaloff>:/icons/app-icon.svgz</normaloff>:/icons/app-icon.svgz</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -64,8 +68,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>215</width>
-                  <height>369</height>
+                  <width>381</width>
+                  <height>359</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayoutStates">
@@ -100,12 +104,20 @@
             <property name="text">
              <string>Synchronise</string>
             </property>
+            <property name="icon">
+             <iconset resource="Icons.qrc">
+              <normaloff>:/icons/view-refresh.svgz</normaloff>:/icons/view-refresh.svgz</iconset>
+            </property>
            </widget>
           </item>
           <item row="1" column="1">
            <widget class="QPushButton" name="pushButtonEmergencyStop">
             <property name="text">
              <string>Emergency stop</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Icons.qrc">
+              <normaloff>:/icons/process-stop.svgz</normaloff>:/icons/process-stop.svgz</iconset>
             </property>
            </widget>
           </item>
@@ -120,25 +132,32 @@
            <item row="0" column="0" colspan="2">
             <widget class="QTextBrowser" name="textBrowser"/>
            </item>
-           <item row="1" column="0">
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>460</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
            <item row="1" column="1">
             <widget class="QPushButton" name="pushButtonEraseLog">
              <property name="text">
               <string>Erase log</string>
              </property>
+             <property name="icon">
+              <iconset resource="Icons.qrc">
+               <normaloff>:/icons/draw-eraser.svgz</normaloff>:/icons/draw-eraser.svgz</iconset>
+             </property>
             </widget>
+           </item>
+           <item row="1" column="0">
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Preferred</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>
@@ -182,7 +201,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>818</width>
+     <width>808</width>
      <height>24</height>
     </rect>
    </property>
@@ -213,7 +232,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="Icons.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionQuit</sender>

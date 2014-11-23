@@ -30,6 +30,8 @@ void MainWindow::addBlankStateRow()
     combobox->addItems(getStates());
 
     QLineEdit *lineEdit = new QLineEdit;
+    lineEdit->setMinimumWidth(100);
+
     QPushButton *pushButton = new QPushButton(tr("Send"));
 
     layout->addWidget(combobox);
@@ -61,6 +63,26 @@ void MainWindow::deleteStateRow(QHBoxLayout *row)
         item->deleteLater();
     }
     row->deleteLater();
+}
+
+void MainWindow::enableValueColor(QLineEdit *lineEdit)
+{
+    lineEdit->setStyleSheet("border: blue");
+}
+
+void MainWindow::disableValueColor(QLineEdit *lineEdit)
+{
+    lineEdit->setStyleSheet("");
+}
+
+void MainWindow::disableValueRefreshing(QLineEdit *lineEdit)
+{
+    lineEdit->blockSignals(true);
+}
+
+void MainWindow::enableValueRefreshing(QLineEdit *lineEdit)
+{
+    lineEdit->blockSignals(false);
 }
 
 QStringList MainWindow::getStates() const

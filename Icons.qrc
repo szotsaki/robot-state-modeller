@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/view-refresh.svgz</file>
+        <file>icons/draw-eraser.svgz</file>
+        <file>icons/process-stop.svgz</file>
+        <file>icons/app-icon.svgz</file>
+    </qresource>
+</RCC>

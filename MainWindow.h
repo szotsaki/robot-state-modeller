@@ -34,6 +34,10 @@ private:
     void createSignalSlotConnections();
     void addBlankStateRow();
     void deleteStateRow(QHBoxLayout *row);
+    void disableValueRefreshing(QLineEdit *lineEdit);
+    void enableValueRefreshing(QLineEdit *lineEdit);
+    void enableValueColor(QLineEdit *lineEdit);
+    void disableValueColor(QLineEdit *lineEdit);
     QStringList getStates() const;
 
 private slots:
