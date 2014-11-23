@@ -21,10 +21,7 @@ MainWindow::~MainWindow()
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::FocusIn && object->isWidgetType()) {
-        valueEditActivated(qobject_cast<QLineEdit *>(object));
-        return true;
-    } else if (event->type() == QEvent::FocusOut && object->isWidgetType()) {
-        valueEditDeactivated(qobject_cast<QLineEdit *>(object));
+        activateValueEdit(qobject_cast<QLineEdit *>(object));
         return true;
     }
 
@@ -74,6 +71,8 @@ void MainWindow::addBlankStateRow()
     connect(combobox, currentIndexChanged, this, &MainWindow::stateCbIndexChanged);
     const auto deleteRow = [this, layout](int index){if (index == 0) {this->deleteStateRow(layout);}};
     connect(combobox, currentIndexChanged, this, deleteRow);
+    const auto deactivateValueEdit = [this, lineEdit] {this->deactivateValueEdit(lineEdit);};
+    connect(pushButton, &QPushButton::pressed, this, deactivateValueEdit);
 }
 
 void MainWindow::deleteStateRow(QHBoxLayout *row)
@@ -95,7 +94,7 @@ void MainWindow::disableValueColor(QLineEdit *valueEdit)
     valueEdit->setStyleSheet("");
 }
 
-void MainWindow::valueEditActivated(QLineEdit *valueEdit)
+void MainWindow::activateValueEdit(QLineEdit *valueEdit)
 {
     disableValueRefreshing(valueEdit);
 
@@ -103,7 +102,7 @@ void MainWindow::valueEditActivated(QLineEdit *valueEdit)
     pushButton->setVisible(true);
 }
 
-void MainWindow::valueEditDeactivated(QLineEdit *valueEdit)
+void MainWindow::deactivateValueEdit(QLineEdit *valueEdit)
 {
     enableValueRefreshing(valueEdit);
 
