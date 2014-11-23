@@ -44,10 +44,11 @@ private:
     void activateValueEdit(QLineEdit *valueEdit);
     void deactivateValueEdit(QLineEdit *valueEdit);
     QPushButton *getPushButtonInRow(QLineEdit *valueEdit) const;
-    QStringList getStates() const;
+    QLineEdit *getLineEditInRow(QComboBox *comboBox) const;
 
 private slots:
-    void stateCbIndexChanged(int index);
+    void addBlankStateRowByCb(int index);
+    void comboBoxIndexChanged(QComboBox *comboBox);
     void eraseLog();
 
 };

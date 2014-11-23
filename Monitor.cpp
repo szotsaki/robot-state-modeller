@@ -64,7 +64,7 @@ std::string Monitor::getDataIdText(const dataId_t dataId) const
         return "State machine";
         break;
     default:
-        Q_ASSERT(0);
+        Q_UNREACHABLE();
         return "UNKNOWN";
         break;
     }

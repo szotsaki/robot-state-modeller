@@ -2,6 +2,7 @@
 #include "ui_MainWindow.h"
 
 Q_DECLARE_METATYPE(QHBoxLayout *)
+Q_DECLARE_METATYPE(dataId_t)
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,13 +41,22 @@ void MainWindow::addBlankStateRow()
 {
     // Creating a new QComboBox - QLineEdit - QPushButton row
     QHBoxLayout *layout = new QHBoxLayout;
-    QComboBox *combobox = new QComboBox;
-    combobox->addItems(getStates());
 
+    // Adding QComboBox
+    QComboBox *combobox = new QComboBox;
+    combobox->addItem("");
+    for (const auto &dataId : monitor.getAllDataIds()) {
+        const QString name = QString::fromStdString(monitor.getDataIdText(dataId));
+        combobox->addItem(name, dataId);
+    }
+    combobox->setProperty("managingLayout", QVariant::fromValue(layout));
+
+    // Adding QLineEdit
     QLineEdit *lineEdit = new QLineEdit;
     lineEdit->setMinimumWidth(100);
     lineEdit->setProperty("managingLayout", QVariant::fromValue(layout));
 
+    // Adding QPushButton
     QPushButton *pushButton = new QPushButton(tr("Send"));
     pushButton->setVisible(false);
 
@@ -59,7 +69,7 @@ void MainWindow::addBlankStateRow()
     const auto currentIndexChanged = static_cast<void (QComboBox:: *)(int)>(&QComboBox::currentIndexChanged);
     const QList<QComboBox *> comboBoxes = ui->groupBoxScrollArea->findChildren<QComboBox *>();
     for (const QComboBox *disconnectCombobox : comboBoxes) {
-        disconnect(disconnectCombobox, currentIndexChanged, this, &MainWindow::stateCbIndexChanged);
+        disconnect(disconnectCombobox, currentIndexChanged, this, &MainWindow::addBlankStateRowByCb);
     }
 
     // Inserting the new line right before the spring
@@ -68,8 +78,10 @@ void MainWindow::addBlankStateRow()
 
 
     // Connect signals of the row
-    connect(combobox, currentIndexChanged, this, &MainWindow::stateCbIndexChanged);
-    const auto deleteRow = [this, layout](int index){if (index == 0) {this->deleteStateRow(layout);}};
+    const auto comboBoxIndexChanged = [this, combobox] {this->comboBoxIndexChanged(combobox);};
+    connect(combobox, currentIndexChanged, this, comboBoxIndexChanged);
+    connect(combobox, currentIndexChanged, this, &MainWindow::addBlankStateRowByCb);
+    const auto deleteRow = [this, layout] (int index) {if (index == 0) {this->deleteStateRow(layout);}};
     connect(combobox, currentIndexChanged, this, deleteRow);
     const auto deactivateValueEdit = [this, lineEdit] {this->deactivateValueEdit(lineEdit);};
     connect(pushButton, &QPushButton::pressed, this, deactivateValueEdit);
@@ -96,6 +108,10 @@ void MainWindow::disableValueColor(QLineEdit *valueEdit)
 
 void MainWindow::activateValueEdit(QLineEdit *valueEdit)
 {
+    if (valueEdit->isReadOnly()) {
+        return;
+    }
+
     disableValueRefreshing(valueEdit);
 
     QPushButton *pushButton = getPushButtonInRow(valueEdit);
@@ -104,6 +120,10 @@ void MainWindow::activateValueEdit(QLineEdit *valueEdit)
 
 void MainWindow::deactivateValueEdit(QLineEdit *valueEdit)
 {
+    if (valueEdit->isReadOnly()) {
+        return;
+    }
+
     enableValueRefreshing(valueEdit);
 
     QPushButton *pushButton = getPushButtonInRow(valueEdit);
@@ -112,8 +132,14 @@ void MainWindow::deactivateValueEdit(QLineEdit *valueEdit)
 
 QPushButton* MainWindow::getPushButtonInRow(QLineEdit *valueEdit) const
 {
-    QHBoxLayout *layout = valueEdit->property("managingLayout").value<QHBoxLayout *>();
+    const QHBoxLayout *layout = valueEdit->property("managingLayout").value<QHBoxLayout *>();
     return static_cast<QPushButton *>(layout->itemAt(2)->widget());
+}
+
+QLineEdit *MainWindow::getLineEditInRow(QComboBox *comboBox) const
+{
+    const QHBoxLayout *layout = comboBox->property("managingLayout").value<QHBoxLayout *>();
+    return static_cast<QLineEdit *>(layout->itemAt(1)->widget());
 }
 
 void MainWindow::disableValueRefreshing(QLineEdit *valueEdit)
@@ -126,19 +152,7 @@ void MainWindow::enableValueRefreshing(QLineEdit *valueEdit)
     valueEdit->blockSignals(false);
 }
 
-QStringList MainWindow::getStates() const
-{
-    QStringList list;
-    list << "";
-    list << "State 1";
-    list << "State 2";
-    list << "State 3";
-    list << "State 4";
-
-    return list;
-}
-
-void MainWindow::stateCbIndexChanged(int index)
+void MainWindow::addBlankStateRowByCb(int index)
 {
     // The first one is always empty
     if (index == 0) {
@@ -146,6 +160,20 @@ void MainWindow::stateCbIndexChanged(int index)
     }
 
     addBlankStateRow();
+}
+
+void MainWindow::comboBoxIndexChanged(QComboBox *comboBox)
+{
+    // The first one is always empty
+    const int index = comboBox->currentIndex();
+    if (index == 0) {
+        return;
+    }
+
+    const dataId_t dataID = comboBox->currentData().value<dataId_t>();
+
+    QLineEdit *lineEdit = getLineEditInRow(comboBox);
+    lineEdit->setReadOnly(false);
 }
 
 void MainWindow::eraseLog()
