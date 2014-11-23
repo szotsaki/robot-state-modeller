@@ -2,6 +2,7 @@
 #define DATA_CONTAINER_H_
 
 #include <array>
+#include <vector>
 #include <QDataStream>
 
 #include "Data/DataInterface.h"
@@ -19,6 +20,10 @@ public:
                      const ValueWrapper &value,
                      QDataStream &outStream);
     void sync(QDataStream &outStream);
+
+    std::vector<dataId_t> getAllDataIds() const;
+    std::vector<dataId_t> getTimeChartDataIds() const;
+    std::vector<dataId_t> getBarChartDataIds() const;
 
     std::string getDataValueText(const dataId_t dataId) const;
     void drawTimeChart(const dataId_t dataId) const;

@@ -41,14 +41,17 @@ std::string Monitor::getDataValueText(const dataId_t dataId) const
     return dataContainer.getDataValueText(dataId);
 }
 
+std::vector<dataId_t> Monitor::getAllDataIds() const
+{
+    return dataContainer.getAllDataIds();
+}
+
 std::vector<dataId_t> Monitor::getTimeChartDataIds() const
 {
-    std::vector<dataId_t> result;
-    return result;
+    return dataContainer.getTimeChartDataIds();
 }
 
 std::vector<dataId_t> Monitor::getBarChartDataIds() const
 {
-    std::vector<dataId_t> result;
-    return result;
+    return dataContainer.getBarChartDataIds();
 }

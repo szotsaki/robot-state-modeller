@@ -58,3 +58,33 @@ void DataContainer::drawBarChart(const dataId_t dataId) const
 {
     data[dataId]->drawBarChart();
 }
+
+std::vector<dataId_t> DataContainer::getAllDataIds() const
+{
+    std::vector<dataId_t> result;
+    for (size_t i = 0; i < data.size(); ++i)
+    {
+        result.push_back(static_cast<dataId_t>(i));
+    }
+    return result;
+}
+
+std::vector<dataId_t> DataContainer::getTimeChartDataIds() const
+{
+    std::vector<dataId_t> result;
+    for (size_t i = 0; i < data.size(); ++i)
+    {
+        result.push_back(static_cast<dataId_t>(i));
+    }
+    return result;
+}
+
+std::vector<dataId_t> DataContainer::getBarChartDataIds() const
+{
+    std::vector<dataId_t> result;
+    for (size_t i = 0; i < data.size(); ++i)
+    {
+        result.push_back(static_cast<dataId_t>(i));
+    }
+    return result;
+}

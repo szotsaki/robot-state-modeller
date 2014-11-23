@@ -13,12 +13,17 @@ class Monitor : public QObject
 
 public:
 
+    // Network-related functions.
     void receive();
     void send(const dataId_t dataId, const ValueWrapper &value);
 
+    // UI-related functions.
     std::string getDataValueText(const dataId_t dataId) const;
     void drawTimeChart(const dataId_t dataId);
     void drawBarChart(const dataId_t dataId);
+
+    // Query data identifiers.
+    std::vector< dataId_t > getAllDataIds() const;
     std::vector< dataId_t > getTimeChartDataIds() const;
     std::vector< dataId_t > getBarChartDataIds() const;
 
