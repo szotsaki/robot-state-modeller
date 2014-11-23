@@ -2,6 +2,7 @@
 #define COMMAND_H_
 
 #include <QDataStream>
+#include "ValueWrapper.h"
 
 enum class commandProgress_t
 {
@@ -23,7 +24,7 @@ class Command
 public:
     commandProgress_t progress;
 
-    void serialise(QDataStream &outStream);
+    void serialise(const ValueWrapper &value, QDataStream &outStream);
     void update(const T &state);
     bool inProgess();
 

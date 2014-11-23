@@ -5,6 +5,7 @@
 
 #include "DataContainer.h"
 #include "Network.h"
+#include "ValueWrapper.h"
 
 class Monitor : public QObject
 {
@@ -13,7 +14,7 @@ class Monitor : public QObject
 public:
 
     void receive();
-    void send(const dataId_t dataId);
+    void send(const dataId_t dataId, const ValueWrapper &value);
 
 public slots:
     void sync();

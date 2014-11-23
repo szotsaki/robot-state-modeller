@@ -2,6 +2,8 @@
 #define DATA_INTERFACE_H_
 
 #include <QDataStream>
+#include <string>
+#include "ValueWrapper.h"
 
 enum dataId_t
 {
@@ -16,7 +18,7 @@ enum dataId_t
 };
 
 QDataStream& operator >>(QDataStream &inStream, dataId_t &dataId);
-
+std::string getDataIdStr(const dataId_t &dataId);
 
 /**
  * The interface for telemetry data.
@@ -26,13 +28,18 @@ QDataStream& operator >>(QDataStream &inStream, dataId_t &dataId);
  * There can be command only telemetry data (e.g. emergency stop), and
  * state only telemetry data (readings from light sensor).
  */
+
+/**
+ * push with Wrapper
+ */
 class DataInterface
 {
 
 public:
     virtual ~DataInterface();
 
-    virtual void sendCommand(QDataStream &outStream,
+    virtual void sendCommand(const ValueWrapper &value,
+                             QDataStream &outStream,
                              const bool onlyInProgress = false) = 0;
     virtual void deserialise(QDataStream &inStream) = 0;
     virtual void updateCommand() = 0;

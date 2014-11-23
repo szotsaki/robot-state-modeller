@@ -19,10 +19,12 @@ void DataContainer::receive(const dataId_t dataId, QDataStream &inStream)
     data[dataId]->deserialise(inStream);
 }
 
-void DataContainer::sendCommand(const dataId_t dataId, QDataStream &outStream)
+void DataContainer::sendCommand(const dataId_t dataId,
+                                const ValueWrapper &value,
+                                QDataStream &outStream)
 {
     outStream << dataId;    // Serialize data identifier.
-    data[dataId]->sendCommand(outStream, false);
+    data[dataId]->sendCommand(value, outStream, false);
 }
 
 void DataContainer::sync(QDataStream &outStream)

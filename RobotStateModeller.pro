@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     DataStateOnly.cpp \
     State.cpp \
     DataInterface.cpp \
-    QCustomPlot.cpp
+    QCustomPlot.cpp \
+    ValueWrapper.cpp \
+    ValueWrapperFactory.cpp
     QCustomPlot.cpp
 
 HEADERS  += \
@@ -38,7 +40,9 @@ HEADERS  += \
     State.h \
     MainWindow.h \
     QCircularBuffer.h \
-    QCustomPlot.h
+    QCustomPlot.h \
+    ValueWrapper.h \
+    ValueWrapperFactory.h
 
 FORMS    += \
     MainWindow.ui

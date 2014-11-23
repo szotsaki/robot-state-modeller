@@ -5,6 +5,7 @@
 #include <QDataStream>
 
 #include "DataInterface.h"
+#include "ValueWrapper.h"
 
 class DataContainer
 {
@@ -14,7 +15,9 @@ public:
 	DataContainer();
     ~DataContainer();
     void receive(const dataId_t dataId, QDataStream &inStream);
-    void sendCommand(const dataId_t dataId, QDataStream &outStream);
+    void sendCommand(const dataId_t dataId,
+                     const ValueWrapper &value,
+                     QDataStream &outStream);
     void sync(QDataStream &outStream);
 
 private:

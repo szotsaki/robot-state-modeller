@@ -1,12 +1,13 @@
 #include "DataCommandOnly.h"
 
 template <typename T>
-void DataCommandOnly<T>::sendCommand(QDataStream &outStream,
+void DataCommandOnly<T>::sendCommand(const ValueWrapper &value,
+                                     QDataStream &outStream,
                                      const bool onlyInProgress)
 {
     if (!onlyInProgress || command.inProgess())
     {
-        command.serialise(outStream);
+        command.serialise(value, outStream);
     }
 }
 

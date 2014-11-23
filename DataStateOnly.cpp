@@ -1,7 +1,9 @@
 #include "DataStateOnly.h"
 
 template <typename T>
-void DataStateOnly<T>::sendCommand(QDataStream &, const bool)
+void DataStateOnly<T>::sendCommand(const ValueWrapper &,
+                                   QDataStream &,
+                                   const bool)
 {
     // Has no command, nothing to do.
 }

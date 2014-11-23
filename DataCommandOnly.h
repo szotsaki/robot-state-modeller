@@ -5,6 +5,7 @@
 
 #include "Command.h"
 #include "DataInterface.h"
+#include "ValueWrapper.h"
 
 template<typename T>
 class DataCommandOnly : public DataInterface
@@ -13,7 +14,8 @@ class DataCommandOnly : public DataInterface
 public:
     Command<T> command;
 
-    virtual void sendCommand(QDataStream &outStream,
+    virtual void sendCommand(const ValueWrapper &value,
+                             QDataStream &outStream,
                              const bool onlyInProgress = false) override;
     virtual void deserialise(QDataStream &inStream) override;
     virtual void updateCommand() override;

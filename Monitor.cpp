@@ -9,9 +9,9 @@ void Monitor::receive()
     dataContainer.receive(dataId, inStream);
 }
 
-void Monitor::send(const dataId_t dataId)
+void Monitor::send(const dataId_t dataId, const ValueWrapper &value)
 {
-    dataContainer.sendCommand(dataId, network.getSendStream());
+    dataContainer.sendCommand(dataId, value, network.getSendStream());
     network.send();
 }
 
