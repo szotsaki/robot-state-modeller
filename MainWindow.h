@@ -41,8 +41,8 @@ private:
     void enableValueRefreshing(QLineEdit *valueEdit);
     void enableValueColor(QLineEdit *valueEdit);
     void disableValueColor(QLineEdit *valueEdit);
-    void valueEditActivated(QLineEdit *valueEdit);
-    void valueEditDeactivated(QLineEdit *valueEdit);
+    void activateValueEdit(QLineEdit *valueEdit);
+    void deactivateValueEdit(QLineEdit *valueEdit);
     QPushButton *getPushButtonInRow(QLineEdit *valueEdit) const;
     QStringList getStates() const;
 
