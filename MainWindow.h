@@ -1,11 +1,16 @@
 #ifndef MAIN_WINDOW_H_
 #define MAIN_WINDOW_H_
 
+#include <functional>
+
 #include <QMainWindow>
 #include <QHBoxLayout>
 #include <QComboBox>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSignalMapper>
+#include <QStringList>
+#include <QDebug>
 
 #include "Monitor.h"
 
@@ -22,11 +27,17 @@ public:
     ~MainWindow();
 
 private:
+    QSignalMapper signalMapper;
     Ui::MainWindow *ui;
     Monitor monitor;
 
     void createSignalSlotConnections();
     void addBlankStateRow();
+    void deleteStateRow(QHBoxLayout *row);
+    QStringList getStates() const;
+
+private slots:
+    void stateCbIndexChanged(int index);
 
 };
 
