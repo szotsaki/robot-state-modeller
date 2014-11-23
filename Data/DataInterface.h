@@ -5,6 +5,16 @@
 #include <string>
 #include "../ValueWrapper.h"
 
+typedef enum
+{
+    kDvt_Int32,
+    kDvt_Float64,
+    kDvt_Int32Vec,
+    kDvt_Float64Vec,
+    kDvt_String
+} dataValueType_t;
+
+// Note: Must be in sync with dataValueTypes and dataIdTexts arrays.
 enum dataId_t
 {
     kD_Sync = 0,
@@ -18,6 +28,9 @@ enum dataId_t
     kD_NumIds
 };
 
+extern dataValueType_t dataValueTypes[kD_NumIds];
+extern std::string     dataIdTexts[kD_NumIds];
+
 QDataStream& operator >>(QDataStream &inStream, dataId_t &dataId);
 
 /**
@@ -27,10 +40,6 @@ QDataStream& operator >>(QDataStream &inStream, dataId_t &dataId);
  * (state) on the robot itself.
  * There can be command only telemetry data (e.g. emergency stop), and
  * state only telemetry data (readings from light sensor).
- */
-
-/**
- * push with Wrapper
  */
 class DataInterface
 {

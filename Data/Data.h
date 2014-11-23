@@ -76,7 +76,7 @@ inline void Data<T>::drawTimeChart() const
 template<typename T>
 inline void Data<T>::drawBarChart() const
 {
-    // TODO
+    // Cannot draw since state contains simple types.
 }
 
 #endif // DATA_H_

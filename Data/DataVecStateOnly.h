@@ -1,5 +1,5 @@
-#ifndef DATA_STATE_ONLY_H_
-#define DATA_STATE_ONLY_H_
+#ifndef DATA_VEC_STATE_ONLY_H_
+#define DATA_VEC_STATE_ONLY_H_
 
 #include <QDataStream>
 #include <sstream>
@@ -9,11 +9,13 @@
 #include "State.h"
 
 template<typename T>
-class DataStateOnly : public DataInterface
+class DataVecStateOnly : public DataInterface
 {
+    typedef std::vector< T >	_MyVal;
+    typedef State< _MyVal >		_MyState;
 
 public:
-    QCircularBuffer< State<T> > states;
+    QCircularBuffer< _MyState > states;
 
     virtual void sendCommand(const ValueWrapper &value,
                              QDataStream &outStream,
@@ -27,7 +29,7 @@ public:
 };
 
 template <typename T>
-inline void DataStateOnly<T>::sendCommand(const ValueWrapper &,
+inline void DataVecStateOnly<T>::sendCommand(const ValueWrapper &,
                                           QDataStream &,
                                           const bool)
 {
@@ -35,21 +37,21 @@ inline void DataStateOnly<T>::sendCommand(const ValueWrapper &,
 }
 
 template <typename T>
-inline void DataStateOnly<T>::deserialise(QDataStream &inStream)
+inline void DataVecStateOnly<T>::deserialise(QDataStream &inStream)
 {
-    State<T> s;
+    _MyState s;
     s.deserialise(inStream);
     states.push_back(s);
 }
 
 template <typename T>
-inline void DataStateOnly<T>::updateCommand()
+inline void DataVecStateOnly<T>::updateCommand()
 {
     // Has no command, nothing update.
 }
 
 template<typename T>
-inline std::string DataStateOnly<T>::getValueText() const
+inline std::string DataVecStateOnly<T>::getValueText() const
 {
     if (!states.empty())
     {
@@ -61,15 +63,15 @@ inline std::string DataStateOnly<T>::getValueText() const
 }
 
 template<typename T>
-inline void DataStateOnly<T>::drawTimeChart() const
+inline void DataVecStateOnly<T>::drawTimeChart() const
 {
-    // TODO
+    // Cannot draw since state contains vectors.
 }
 
 template<typename T>
-inline void DataStateOnly<T>::drawBarChart() const
+inline void DataVecStateOnly<T>::drawBarChart() const
 {
     // TODO
 }
 
-#endif // DATA_STATE_ONLY_H_
+#endif // DATA_VEC_STATE_ONLY_H_

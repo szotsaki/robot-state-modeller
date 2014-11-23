@@ -2,18 +2,17 @@
 #include <vector>
 #include "Data/Data.h"
 #include "Data/DataCommandOnly.h"
-#include "Data/DataStateOnly.h"
+#include "Data/DataVecStateOnly.h"
 
 DataContainer::DataContainer()
 {
-    // TODO: add all telemetry data here.
     data[kD_Sync] = new DataCommandOnly<int>();
     data[kD_Estop] = new DataCommandOnly<int>();
     data[kD_Velocity] = new Data<double>();
     data[kD_Accel] = new Data<double>();
     data[kD_SteerAng] = new Data<double>();
-    data[kD_LightSen] = new DataStateOnly< std::vector<int> >();
-    data[kD_DistSen] = new DataStateOnly< std::vector<double> >();
+    data[kD_LightSen] = new DataVecStateOnly< int >();
+    data[kD_DistSen] = new DataVecStateOnly< double >();
     data[kD_SmState] = new Data<int>();
 }
 
@@ -42,6 +41,11 @@ void DataContainer::sync(QDataStream &outStream)
 {
     Q_UNUSED(outStream);
     // TODO: implement
+}
+
+std::string DataContainer::getDataIdText(const dataId_t dataId) const
+{
+    return dataIdTexts[dataId];
 }
 
 std::string DataContainer::getDataValueText(const dataId_t dataId) const
@@ -74,7 +78,12 @@ std::vector<dataId_t> DataContainer::getTimeChartDataIds() const
     std::vector<dataId_t> result;
     for (size_t i = 0; i < data.size(); ++i)
     {
-        result.push_back(static_cast<dataId_t>(i));
+        dataId_t id = static_cast<dataId_t>(i);
+        dataValueType_t type = dataValueTypes[id];
+        if (type == kDvt_Int32 || type == kDvt_Float64)
+        {
+            result.push_back(id);
+        }
     }
     return result;
 }
@@ -84,7 +93,12 @@ std::vector<dataId_t> DataContainer::getBarChartDataIds() const
     std::vector<dataId_t> result;
     for (size_t i = 0; i < data.size(); ++i)
     {
-        result.push_back(static_cast<dataId_t>(i));
+        dataId_t id = static_cast<dataId_t>(i);
+        dataValueType_t type = dataValueTypes[id];
+        if (type == kDvt_Int32Vec || type == kDvt_Float64Vec)
+        {
+            result.push_back(id);
+        }
     }
     return result;
 }

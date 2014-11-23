@@ -21,10 +21,11 @@ public:
                      QDataStream &outStream);
     void sync(QDataStream &outStream);
 
-    std::vector<dataId_t> getAllDataIds() const;
-    std::vector<dataId_t> getTimeChartDataIds() const;
-    std::vector<dataId_t> getBarChartDataIds() const;
+    std::vector< dataId_t > getAllDataIds() const;
+    std::vector< dataId_t > getTimeChartDataIds() const;
+    std::vector< dataId_t > getBarChartDataIds() const;
 
+    std::string getDataIdText(const dataId_t dataId) const;
     std::string getDataValueText(const dataId_t dataId) const;
     void drawTimeChart(const dataId_t dataId) const;
     void drawBarChart(const dataId_t dataId) const;

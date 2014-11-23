@@ -39,8 +39,8 @@ HEADERS  += \
     Data/Data.h \
     Data/DataCommandOnly.h \
     Data/DataInterface.h \
-    Data/DataStateOnly.h \
-    Data/State.h
+    Data/State.h \
+    Data/DataVecStateOnly.h
 
 FORMS    += \
     MainWindow.ui
