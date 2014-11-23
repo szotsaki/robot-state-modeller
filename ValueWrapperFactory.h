@@ -10,7 +10,22 @@
  */
 class ValueWrapperFactory
 {
-    static ValueWrapper *	create(const dataId_t dataId);
+
+public:
+    typedef enum
+    {
+        kVt_Int32,
+        kVt_Float64,
+        kVt_Int32Vec,
+        kVt_Float64Vec,
+        kVt_String
+    } valueType_t;
+
+    static ValueWrapper *	create(const dataId_t dataId,
+                                   const std::string &text);
+
+private:
+    static valueType_t getValueType(const dataId_t dataId);
 };
 
 #endif // VALUEWRAPPERFACTORY_H

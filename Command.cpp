@@ -1,10 +1,10 @@
 #include "Command.h"
 
 template<typename T>
-void Command<T>::serialise(const ValueWrapper &,
+void Command<T>::serialise(const ValueWrapper &wrapper,
                            QDataStream &outStream)
 {
-    // TODO: refresh value from passed param.
+    value = static_cast< TValue<T> & >(wrapper).getValue();
     outStream << value;
     progress = commandProgress_t::kInProgress;
 }
