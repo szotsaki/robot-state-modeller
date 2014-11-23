@@ -1,10 +1,13 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+Q_DECLARE_METATYPE(QHBoxLayout *)
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+
     ui->setupUi(this);
     createSignalSlotConnections();
     addBlankStateRow();
@@ -15,11 +18,25 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+bool MainWindow::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::FocusIn && object->isWidgetType()) {
+        valueEditActivated(qobject_cast<QLineEdit *>(object));
+        return true;
+    } else if (event->type() == QEvent::FocusOut && object->isWidgetType()) {
+        valueEditDeactivated(qobject_cast<QLineEdit *>(object));
+        return true;
+    }
+
+    return QObject::eventFilter(object, event);
+}
+
 void MainWindow::createSignalSlotConnections()
 {
     connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
     connect(ui->pushButtonEmergencyStop, &QPushButton::pressed, &monitor, &Monitor::emergencyStop);
     connect(ui->pushButtonSynchronise, &QPushButton::pressed, &monitor, &Monitor::sync);
+    connect(ui->pushButtonEraseLog, &QPushButton::pressed, this, &MainWindow::eraseLog);
 }
 
 void MainWindow::addBlankStateRow()
@@ -31,12 +48,15 @@ void MainWindow::addBlankStateRow()
 
     QLineEdit *lineEdit = new QLineEdit;
     lineEdit->setMinimumWidth(100);
+    lineEdit->setProperty("managingLayout", QVariant::fromValue(layout));
 
     QPushButton *pushButton = new QPushButton(tr("Send"));
+    pushButton->setVisible(false);
 
     layout->addWidget(combobox);
     layout->addWidget(lineEdit);
     layout->addWidget(pushButton);
+    lineEdit->installEventFilter(this);
 
     // Disconnect all the comboboxes "addBlankStateRow()" calls because only the last one should emit this signal
     const auto currentIndexChanged = static_cast<void (QComboBox:: *)(int)>(&QComboBox::currentIndexChanged);
@@ -65,24 +85,46 @@ void MainWindow::deleteStateRow(QHBoxLayout *row)
     row->deleteLater();
 }
 
-void MainWindow::enableValueColor(QLineEdit *lineEdit)
+void MainWindow::enableValueColor(QLineEdit *valueEdit)
 {
-    lineEdit->setStyleSheet("border: blue");
+    valueEdit->setStyleSheet("border: blue");
 }
 
-void MainWindow::disableValueColor(QLineEdit *lineEdit)
+void MainWindow::disableValueColor(QLineEdit *valueEdit)
 {
-    lineEdit->setStyleSheet("");
+    valueEdit->setStyleSheet("");
 }
 
-void MainWindow::disableValueRefreshing(QLineEdit *lineEdit)
+void MainWindow::valueEditActivated(QLineEdit *valueEdit)
 {
-    lineEdit->blockSignals(true);
+    disableValueRefreshing(valueEdit);
+
+    QPushButton *pushButton = getPushButtonInRow(valueEdit);
+    pushButton->setVisible(true);
 }
 
-void MainWindow::enableValueRefreshing(QLineEdit *lineEdit)
+void MainWindow::valueEditDeactivated(QLineEdit *valueEdit)
 {
-    lineEdit->blockSignals(false);
+    enableValueRefreshing(valueEdit);
+
+    QPushButton *pushButton = getPushButtonInRow(valueEdit);
+    pushButton->setVisible(false);
+}
+
+QPushButton* MainWindow::getPushButtonInRow(QLineEdit *valueEdit) const
+{
+    QHBoxLayout *layout = valueEdit->property("managingLayout").value<QHBoxLayout *>();
+    return static_cast<QPushButton *>(layout->itemAt(2)->widget());
+}
+
+void MainWindow::disableValueRefreshing(QLineEdit *valueEdit)
+{
+    valueEdit->blockSignals(true);
+}
+
+void MainWindow::enableValueRefreshing(QLineEdit *valueEdit)
+{
+    valueEdit->blockSignals(false);
 }
 
 QStringList MainWindow::getStates() const
@@ -105,4 +147,9 @@ void MainWindow::stateCbIndexChanged(int index)
     }
 
     addBlankStateRow();
+}
+
+void MainWindow::eraseLog()
+{
+    ui->textBrowserLogging->setText(QString::null);
 }

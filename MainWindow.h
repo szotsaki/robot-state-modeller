@@ -26,6 +26,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    bool eventFilter(QObject *object, QEvent *event);
+
 private:
     QSignalMapper signalMapper;
     Ui::MainWindow *ui;
@@ -34,14 +37,18 @@ private:
     void createSignalSlotConnections();
     void addBlankStateRow();
     void deleteStateRow(QHBoxLayout *row);
-    void disableValueRefreshing(QLineEdit *lineEdit);
-    void enableValueRefreshing(QLineEdit *lineEdit);
-    void enableValueColor(QLineEdit *lineEdit);
-    void disableValueColor(QLineEdit *lineEdit);
+    void disableValueRefreshing(QLineEdit *valueEdit);
+    void enableValueRefreshing(QLineEdit *valueEdit);
+    void enableValueColor(QLineEdit *valueEdit);
+    void disableValueColor(QLineEdit *valueEdit);
+    void valueEditActivated(QLineEdit *valueEdit);
+    void valueEditDeactivated(QLineEdit *valueEdit);
+    QPushButton *getPushButtonInRow(QLineEdit *valueEdit) const;
     QStringList getStates() const;
 
 private slots:
     void stateCbIndexChanged(int index);
+    void eraseLog();
 
 };
 

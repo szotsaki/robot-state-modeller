@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>808</width>
-    <height>514</height>
+    <width>806</width>
+    <height>512</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,6 +34,9 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <layout class="QGridLayout" name="gridLayout_3">
+          <property name="bottomMargin">
+           <number>15</number>
+          </property>
           <item row="0" column="0" colspan="2">
            <widget class="QGroupBox" name="groupBoxStates">
             <property name="title">
@@ -44,6 +47,9 @@
               <number>0</number>
              </property>
              <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
               <number>0</number>
              </property>
              <item>
@@ -68,8 +74,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>381</width>
-                  <height>359</height>
+                  <width>380</width>
+                  <height>349</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayoutStates">
@@ -77,6 +83,9 @@
                   <number>0</number>
                  </property>
                  <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
                   <number>0</number>
                  </property>
                  <item>
@@ -130,7 +139,7 @@
           </property>
           <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="0" colspan="2">
-            <widget class="QTextBrowser" name="textBrowser"/>
+            <widget class="QTextBrowser" name="textBrowserLogging"/>
            </item>
            <item row="1" column="1">
             <widget class="QPushButton" name="pushButtonEraseLog">
@@ -201,7 +210,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>808</width>
+     <width>806</width>
      <height>24</height>
     </rect>
    </property>

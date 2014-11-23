@@ -1,6 +1,7 @@
 #ifndef DATA_H_
 #define DATA_H_
 
+#include <sstream>
 #include <QDataStream>
 
 #include "../QCircularBuffer.h"
