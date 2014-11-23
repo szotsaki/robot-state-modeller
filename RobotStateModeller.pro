@@ -17,36 +17,30 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    DataCommandOnly.cpp \
     DataContainer.cpp \
     Monitor.cpp \
     Network.cpp \
     MainWindow.cpp \
-    Data.cpp \
-    Command.cpp \
-    DataStateOnly.cpp \
-    State.cpp \
-    DataInterface.cpp \
     QCustomPlot.cpp \
     ValueWrapper.cpp \
-    ValueWrapperFactory.cpp
-    QCustomPlot.cpp
+    ValueWrapperFactory.cpp \
+    Data/DataInterface.cpp
 
 HEADERS  += \
-    Command.h \
-    Data.h \
-    DataCommandOnly.h \
     DataContainer.h \
-    DataInterface.h \
-    DataStateOnly.h \
     Monitor.h \
     Network.h \
-    State.h \
     MainWindow.h \
     QCircularBuffer.h \
     QCustomPlot.h \
     ValueWrapper.h \
-    ValueWrapperFactory.h
+    ValueWrapperFactory.h \
+    Data/Command.h \
+    Data/Data.h \
+    Data/DataCommandOnly.h \
+    Data/DataInterface.h \
+    Data/DataStateOnly.h \
+    Data/State.h
 
 FORMS    += \
     MainWindow.ui

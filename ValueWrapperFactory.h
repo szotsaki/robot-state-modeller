@@ -1,7 +1,7 @@
 #ifndef VALUEWRAPPERFACTORY_H
 #define VALUEWRAPPERFACTORY_H
 
-#include "DataInterface.h"
+#include "Data/DataInterface.h"
 #include "ValueWrapper.h"
 
 /**

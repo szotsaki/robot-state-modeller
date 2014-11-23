@@ -4,7 +4,7 @@
 #include <array>
 #include <QDataStream>
 
-#include "DataInterface.h"
+#include "Data/DataInterface.h"
 #include "ValueWrapper.h"
 
 class DataContainer
@@ -20,8 +20,12 @@ public:
                      QDataStream &outStream);
     void sync(QDataStream &outStream);
 
+    std::string getDataValueText(const dataId_t dataId) const;
+    void drawTimeChart(const dataId_t dataId) const;
+    void drawBarChart(const dataId_t dataId) const;
+
 private:
-    const std::array<DataInterface *, 0> data;
+    std::array<DataInterface *, kD_NumIds> data;
 
 };
 #endif // DATA_CONTAINER_H_

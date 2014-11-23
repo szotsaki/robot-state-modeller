@@ -16,6 +16,12 @@ public:
     void receive();
     void send(const dataId_t dataId, const ValueWrapper &value);
 
+    std::string getDataValueText(const dataId_t dataId) const;
+    void drawTimeChart(const dataId_t dataId);
+    void drawBarChart(const dataId_t dataId);
+    std::vector< dataId_t > getTimeChartDataIds() const;
+    std::vector< dataId_t > getBarChartDataIds() const;
+
 public slots:
     void sync();
     void emergencyStop();

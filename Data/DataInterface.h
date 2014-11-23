@@ -3,7 +3,7 @@
 
 #include <QDataStream>
 #include <string>
-#include "ValueWrapper.h"
+#include "../ValueWrapper.h"
 
 enum dataId_t
 {
@@ -14,7 +14,8 @@ enum dataId_t
     kD_SteerAng,
     kD_LightSen,
     kD_DistSen,
-    kD_SmState
+    kD_SmState,
+    kD_NumIds
 };
 
 QDataStream& operator >>(QDataStream &inStream, dataId_t &dataId);
@@ -44,5 +45,8 @@ public:
     virtual void deserialise(QDataStream &inStream) = 0;
     virtual void updateCommand() = 0;
 
+    virtual std::string getValueText() const = 0;
+    virtual void drawTimeChart() const = 0;
+    virtual void drawBarChart() const = 0;
 };
 #endif // DATA_INTERFACE_H_
