@@ -50,3 +50,8 @@ HEADERS  += \
 
 FORMS    += \
     MainWindow.ui
+
+OTHER_FILES +=
+
+RESOURCES += \
+    Icons.qrc
