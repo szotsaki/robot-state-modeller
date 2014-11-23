@@ -19,7 +19,6 @@ enum dataId_t
 };
 
 QDataStream& operator >>(QDataStream &inStream, dataId_t &dataId);
-std::string getDataIdStr(const dataId_t &dataId);
 
 /**
  * The interface for telemetry data.

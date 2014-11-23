@@ -36,6 +36,40 @@ void Monitor::drawTimeChart(const dataId_t dataId)
     dataContainer.drawTimeChart(dataId);
 }
 
+std::string Monitor::getDataIdText(const dataId_t dataId) const
+{
+    switch (dataId) {
+    case kD_Sync:
+        return "Synchronization";
+        break;
+    case kD_Estop:
+        return "Emergency stop";
+        break;
+    case kD_Velocity:
+        return "Velocity";
+        break;
+    case kD_Accel:
+        return "Acceleration";
+        break;
+    case kD_SteerAng:
+        return "Steering angle";
+        break;
+    case kD_LightSen:
+        return "Light sensor";
+        break;
+    case kD_DistSen:
+        return "Distance sensor";
+        break;
+    case kD_SmState:
+        return "State machine";
+        break;
+    default:
+        Q_ASSERT(0);
+        return "UNKNOWN";
+        break;
+    }
+}
+
 std::string Monitor::getDataValueText(const dataId_t dataId) const
 {
     return dataContainer.getDataValueText(dataId);

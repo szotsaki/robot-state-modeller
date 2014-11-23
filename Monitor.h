@@ -18,6 +18,7 @@ public:
     void send(const dataId_t dataId, const ValueWrapper &value);
 
     // UI-related functions.
+    std::string getDataIdText(const dataId_t dataId) const;
     std::string getDataValueText(const dataId_t dataId) const;
     void drawTimeChart(const dataId_t dataId);
     void drawBarChart(const dataId_t dataId);
