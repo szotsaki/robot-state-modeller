@@ -1,5 +1,5 @@
-#ifndef DATA_H_
-#define DATA_H_
+#ifndef DATA_RW_H_
+#define DATA_RW_H_
 
 #include <sstream>
 #include <QDataStream>
@@ -10,16 +10,20 @@
 #include "DataInterface.h"
 #include "State.h"
 
+/**
+ * Readable and writable telemetry data.
+ * Uses a simple type for its value.
+ */
 template<typename T>
-class Data : public DataInterface
+class DataRw : public DataInterface
 {
 
 public:
     Command<T> command;
     QCircularBuffer< State<T> > states;
 
-    virtual void sendCommand(const ValueWrapper &value,
-                             QDataStream &outStream,
+    virtual void setCommand(const ValueWrapper &value);
+    virtual void sendCommand(QDataStream &outStream,
                              const bool onlyInProgress = false) override;
     virtual void deserialise(QDataStream &inStream) override;
     virtual void updateCommand() override;
@@ -30,18 +34,23 @@ public:
 };
 
 template<typename T>
-inline void Data<T>::sendCommand(const ValueWrapper &value,
-                          QDataStream &outStream,
-                          const bool onlyInProgress)
+inline void DataRw<T>::setCommand(const ValueWrapper &value)
+{
+    command.setValue(value);
+}
+
+template<typename T>
+inline void DataRw<T>::sendCommand(QDataStream &outStream,
+                                   const bool onlyInProgress)
 {
     if (!onlyInProgress || command.inProgess())
     {
-        command.serialise(value, outStream);
+        command.serialise(outStream);
     }
 }
 
 template<typename T>
-inline void Data<T>::deserialise(QDataStream &inStream)
+inline void DataRw<T>::deserialise(QDataStream &inStream)
 {
     State<T> s;
     s.deserialise(inStream);
@@ -49,14 +58,14 @@ inline void Data<T>::deserialise(QDataStream &inStream)
 }
 
 template<typename T>
-inline void Data<T>::updateCommand()
+inline void DataRw<T>::updateCommand()
 {
     const T value = states.at(0).getValue();
     command.update(value);
 }
 
 template<typename T>
-inline std::string Data<T>::getValueText() const
+inline std::string DataRw<T>::getValueText() const
 {
     if (!states.empty())
     {
@@ -68,15 +77,15 @@ inline std::string Data<T>::getValueText() const
 }
 
 template<typename T>
-inline void Data<T>::drawTimeChart() const
+inline void DataRw<T>::drawTimeChart() const
 {
     // TODO
 }
 
 template<typename T>
-inline void Data<T>::drawBarChart() const
+inline void DataRw<T>::drawBarChart() const
 {
-    // Cannot draw since state contains simple types.
+    // Cannot draw since state does not contain vector types.
 }
 
-#endif // DATA_H_
+#endif // DATA_RW_H_

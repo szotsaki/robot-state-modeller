@@ -1,19 +1,19 @@
 #include "DataContainer.h"
 #include <vector>
-#include "Data/Data.h"
-#include "Data/DataCommandOnly.h"
-#include "Data/DataVecStateOnly.h"
+#include "Data/DataRw.h"
+#include "Data/DataWriteOnly.h"
+#include "Data/DataVecReadOnly.h"
 
 DataContainer::DataContainer()
 {
-    data[kD_Sync] = new DataCommandOnly<int>();
-    data[kD_Estop] = new DataCommandOnly<int>();
-    data[kD_Velocity] = new Data<double>();
-    data[kD_Accel] = new Data<double>();
-    data[kD_SteerAng] = new Data<double>();
-    data[kD_LightSen] = new DataVecStateOnly< int >();
-    data[kD_DistSen] = new DataVecStateOnly< double >();
-    data[kD_SmState] = new Data<int>();
+    data[kD_Sync] = new DataWriteOnly<int>();
+    data[kD_Estop] = new DataWriteOnly<int>();
+    data[kD_Velocity] = new DataRw<double>();
+    data[kD_Accel] = new DataRw<double>();
+    data[kD_SteerAng] = new DataRw<double>();
+    data[kD_LightSen] = new DataVecReadOnly< int >();
+    data[kD_DistSen] = new DataVecReadOnly< double >();
+    data[kD_SmState] = new DataRw<int>();
 }
 
 DataContainer::~DataContainer()
@@ -34,13 +34,17 @@ void DataContainer::sendCommand(const dataId_t dataId,
                                 QDataStream &outStream)
 {
     outStream << dataId;    // Serialize data identifier.
-    data[dataId]->sendCommand(value, outStream, false);
+    data[dataId]->setCommand(value);
+    data[dataId]->sendCommand(outStream, false);
 }
 
 void DataContainer::sync(QDataStream &outStream)
 {
-    Q_UNUSED(outStream);
-    // TODO: implement
+    data[kD_Sync]->sendCommand(outStream, false);
+    for (DataInterface *pData : data)
+    {
+        pData->sendCommand(outStream, true);
+    }
 }
 
 std::string DataContainer::getDataIdText(const dataId_t dataId) const

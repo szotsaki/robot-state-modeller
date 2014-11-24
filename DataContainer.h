@@ -15,20 +15,24 @@ public:
 
 	DataContainer();
     ~DataContainer();
+
+    // Network-related functions.
     void receive(const dataId_t dataId, QDataStream &inStream);
     void sendCommand(const dataId_t dataId,
                      const ValueWrapper &value,
                      QDataStream &outStream);
     void sync(QDataStream &outStream);
 
-    std::vector< dataId_t > getAllDataIds() const;
-    std::vector< dataId_t > getTimeChartDataIds() const;
-    std::vector< dataId_t > getBarChartDataIds() const;
-
+    // UI-related functions.
     std::string getDataIdText(const dataId_t dataId) const;
     std::string getDataValueText(const dataId_t dataId) const;
     void drawTimeChart(const dataId_t dataId) const;
     void drawBarChart(const dataId_t dataId) const;
+
+    // Query data identifiers.
+    std::vector< dataId_t > getAllDataIds() const;
+    std::vector< dataId_t > getTimeChartDataIds() const;
+    std::vector< dataId_t > getBarChartDataIds() const;
 
 private:
     std::array<DataInterface *, kD_NumIds> data;

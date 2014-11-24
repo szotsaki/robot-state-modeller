@@ -36,11 +36,11 @@ HEADERS  += \
     ValueWrapper.h \
     ValueWrapperFactory.h \
     Data/Command.h \
-    Data/Data.h \
-    Data/DataCommandOnly.h \
     Data/DataInterface.h \
     Data/State.h \
-    Data/DataVecStateOnly.h
+    Data/DataRw.h \
+    Data/DataWriteOnly.h \
+    Data/DataVecReadOnly.h
 
 FORMS    += \
     MainWindow.ui

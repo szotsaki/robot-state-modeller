@@ -24,7 +24,8 @@ class Command
 public:
     commandProgress_t progress;
 
-    void serialise(const ValueWrapper &value, QDataStream &outStream);
+    void setValue(const ValueWrapper &value);
+    void serialise(QDataStream &outStream);
     void update(const T &state);
     bool inProgess();
 
@@ -34,10 +35,14 @@ private:
 };
 
 template<typename T>
-inline void Command<T>::serialise(const ValueWrapper &wrapper,
-                           QDataStream &outStream)
+inline void Command<T>::setValue(const ValueWrapper &wrapper)
 {
     value = static_cast< const TValue<T> & >(wrapper).getValue();
+}
+
+template<typename T>
+inline void Command<T>::serialise(QDataStream &outStream)
+{
     outStream << value;
     progress = commandProgress_t::kInProgress;
 }

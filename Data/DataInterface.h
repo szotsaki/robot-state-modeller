@@ -47,8 +47,8 @@ class DataInterface
 public:
     virtual ~DataInterface();
 
-    virtual void sendCommand(const ValueWrapper &value,
-                             QDataStream &outStream,
+    virtual void setCommand(const ValueWrapper &value) = 0;
+    virtual void sendCommand(QDataStream &outStream,
                              const bool onlyInProgress = false) = 0;
     virtual void deserialise(QDataStream &inStream) = 0;
     virtual void updateCommand() = 0;

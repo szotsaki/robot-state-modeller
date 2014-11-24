@@ -1,5 +1,5 @@
-#ifndef DATA_VEC_STATE_ONLY_H_
-#define DATA_VEC_STATE_ONLY_H_
+#ifndef DATA_VEC_READ_ONLY_H_
+#define DATA_VEC_READ_ONLY_H_
 
 #include <QDataStream>
 #include <sstream>
@@ -8,8 +8,12 @@
 #include "DataInterface.h"
 #include "State.h"
 
+/**
+ * Read-only telemetry data.
+ * Uses a vector type for its value.
+ */
 template<typename T>
-class DataVecStateOnly : public DataInterface
+class DataVecReadOnly : public DataInterface
 {
     typedef std::vector< T >	_MyVal;
     typedef State< _MyVal >		_MyState;
@@ -17,8 +21,8 @@ class DataVecStateOnly : public DataInterface
 public:
     QCircularBuffer< _MyState > states;
 
-    virtual void sendCommand(const ValueWrapper &value,
-                             QDataStream &outStream,
+    virtual void setCommand(const ValueWrapper &value);
+    virtual void sendCommand(QDataStream &outStream,
                              const bool onlyInProgress = false) override;
     virtual void deserialise(QDataStream &inStream) override;
     virtual void updateCommand() override;
@@ -29,15 +33,20 @@ public:
 };
 
 template <typename T>
-inline void DataVecStateOnly<T>::sendCommand(const ValueWrapper &,
-                                          QDataStream &,
-                                          const bool)
+inline void DataVecReadOnly<T>::setCommand(const ValueWrapper &)
 {
     // Has no command, nothing to do.
 }
 
 template <typename T>
-inline void DataVecStateOnly<T>::deserialise(QDataStream &inStream)
+inline void DataVecReadOnly<T>::sendCommand(QDataStream &,
+                                            const bool)
+{
+    // Has no command, nothing to do.
+}
+
+template <typename T>
+inline void DataVecReadOnly<T>::deserialise(QDataStream &inStream)
 {
     _MyState s;
     s.deserialise(inStream);
@@ -45,13 +54,13 @@ inline void DataVecStateOnly<T>::deserialise(QDataStream &inStream)
 }
 
 template <typename T>
-inline void DataVecStateOnly<T>::updateCommand()
+inline void DataVecReadOnly<T>::updateCommand()
 {
     // Has no command, nothing update.
 }
 
 template<typename T>
-inline std::string DataVecStateOnly<T>::getValueText() const
+inline std::string DataVecReadOnly<T>::getValueText() const
 {
     if (!states.empty())
     {
@@ -63,15 +72,15 @@ inline std::string DataVecStateOnly<T>::getValueText() const
 }
 
 template<typename T>
-inline void DataVecStateOnly<T>::drawTimeChart() const
+inline void DataVecReadOnly<T>::drawTimeChart() const
 {
     // Cannot draw since state contains vectors.
 }
 
 template<typename T>
-inline void DataVecStateOnly<T>::drawBarChart() const
+inline void DataVecReadOnly<T>::drawBarChart() const
 {
     // TODO
 }
 
-#endif // DATA_VEC_STATE_ONLY_H_
+#endif // DATA_VEC_READ_ONLY_H_

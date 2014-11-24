@@ -1,12 +1,15 @@
 #include "Monitor.h"
-
+#include "ValueWrapperFactory.h"
 
 void Monitor::receive()
 {
     QDataStream &inStream = network.getReceiveStream();
-    dataId_t dataId;
-    inStream >> dataId;
-    dataContainer.receive(dataId, inStream);
+    while (inStream.status() == QDataStream::Ok)
+    {
+        dataId_t dataId;
+        inStream >> dataId;
+        dataContainer.receive(dataId, inStream);
+    }
 }
 
 void Monitor::send(const dataId_t dataId, const ValueWrapper &value)
@@ -23,7 +26,9 @@ void Monitor::sync()
 
 void Monitor::emergencyStop()
 {
-
+    ValueWrapper *wrapper = ValueWrapperFactory::create(kD_Estop, "");
+    send(kD_Estop, *wrapper);
+    delete wrapper;
 }
 
 void Monitor::drawBarChart(const dataId_t dataId)
