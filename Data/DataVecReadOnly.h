@@ -9,8 +9,10 @@
 #include "State.h"
 
 /**
- * Read-only telemetry data.
+ * Read-only vector telemetry data.
  * Uses a vector type for its value.
+ * Read-only means it only stores received states, which
+ * can be displayed on a diagram.
  */
 template<typename T>
 class DataVecReadOnly : public DataInterface
@@ -65,7 +67,11 @@ inline std::string DataVecReadOnly<T>::getValueText() const
     if (!states.empty())
     {
         std::ostringstream oss;
-        //oss << states.at(0);
+        _MyVal val = states.at(0).getValue();
+        for (T elem : val)
+        {
+            oss << elem << ',';
+        }
         return oss.str();
     }
     return std::string();

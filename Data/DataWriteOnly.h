@@ -10,6 +10,8 @@
 /**
  * Write-only telemetry data.
  * Uses a simple type for its value.
+ * Write-only means you can only send commands to modify
+ * it's value (if any) but has no feedback from the robot.
  */
 template<typename T>
 class DataWriteOnly : public DataInterface

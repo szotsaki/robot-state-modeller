@@ -2,6 +2,7 @@
 #define NETWORK_H_
 
 #include <QDataStream>
+#include <QByteArray>
 #include <QTcpSocket>
 
 class Network : QObject
@@ -9,17 +10,21 @@ class Network : QObject
     Q_OBJECT
 
 public:
+    Network();
+
+    bool connected() const;
+    QDataStream& getSendStream();
+    QDataStream& getReceiveStream();
+
+    void connect();
+    void disconnect();
     void send();
-	void disconnect();
-	bool connected();
-    QDataStream& getSendStream() const;
-    QDataStream& getReceiveStream() const;
-	void connect();
 
 private:
-	QDataStream receiveStream;
+    QTcpSocket socket;
+    QDataStream receiveStream;
+    QByteArray sendArray;
 	QDataStream sendStream;
-	QTcpSocket socket;
 
 private slots:
     void onReceive();

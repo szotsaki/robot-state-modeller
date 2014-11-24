@@ -1,39 +1,44 @@
 #include "Network.h"
 
-void Network::send()
+Network::Network()
+    : receiveStream(&socket),
+      sendStream(sendArray)
 {
-
 }
 
-void Network::disconnect()
+bool Network::connected() const
 {
-
+    return socket.state() == QTcpSocket::ConnectedState;
 }
 
-bool Network::connected()
+QDataStream & Network::getSendStream()
 {
-
-	return  nullptr;
+    return sendStream;
 }
 
-void Network::onReceive()
+QDataStream & Network::getReceiveStream()
 {
-
-}
-
-QDataStream & Network::getSendStream() const
-{
-    QDataStream placeholder;
-    return placeholder;
-}
-
-QDataStream & Network::getReceiveStream() const
-{
-    QDataStream placeholder;
-    return placeholder;
+    return receiveStream;
 }
 
 void Network::connect()
 {
+    socket.connectToHost("localhost", 9999);
+}
 
+void Network::disconnect()
+{
+    socket.disconnectFromHost();
+}
+
+void Network::send()
+{
+    socket.write(sendArray);
+}
+
+void Network::onReceive()
+{
+    // Monitor::receive() comes here.
+    // TODO: we dont know if enough data available for a whole
+    //       command at this time. See also Monitor::receive().
 }

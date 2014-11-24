@@ -4,6 +4,8 @@
 void Monitor::receive()
 {
     QDataStream &inStream = network.getReceiveStream();
+    // get msg size
+    // while (inStream.available >= msg size)
     while (inStream.status() == QDataStream::Ok)
     {
         dataId_t dataId;
