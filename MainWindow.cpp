@@ -47,22 +47,28 @@ void MainWindow::addBlankStateRow()
     combobox->addItem("");
     for (const auto &dataId : monitor.getAllDataIds()) {
         const QString name = QString::fromStdString(monitor.getDataIdText(dataId));
-        combobox->addItem(name, dataId);
+        combobox->addItem(name, QVariant::fromValue(dataId));
     }
     combobox->setProperty("managingLayout", QVariant::fromValue(layout));
 
     // Adding QLineEdit
     QLineEdit *lineEdit = new QLineEdit;
-    lineEdit->setMinimumWidth(100);
+    lineEdit->setMinimumWidth(110);
     lineEdit->setProperty("managingLayout", QVariant::fromValue(layout));
 
     // Adding QPushButton
     QPushButton *pushButton = new QPushButton(tr("Send"));
     pushButton->setVisible(false);
 
+    // Adding label
+    QLabel *label = new QLabel;
+    label->setMinimumWidth(80);
+    label->setVisible(false);
+
     layout->addWidget(combobox);
     layout->addWidget(lineEdit);
     layout->addWidget(pushButton);
+    layout->addWidget(label);
     lineEdit->installEventFilter(this);
 
     // Disconnect all the comboboxes "addBlankStateRow()" calls because only the last one should emit this signal
@@ -116,6 +122,10 @@ void MainWindow::activateValueEdit(QLineEdit *valueEdit)
 
     QPushButton *pushButton = getPushButtonInRow(valueEdit);
     pushButton->setVisible(true);
+
+    QLabel *label = getLabelInRow(valueEdit);
+    label->setText("[" + valueEdit->text() + "]");
+    label->setVisible(true);
 }
 
 void MainWindow::deactivateValueEdit(QLineEdit *valueEdit)
@@ -128,12 +138,21 @@ void MainWindow::deactivateValueEdit(QLineEdit *valueEdit)
 
     QPushButton *pushButton = getPushButtonInRow(valueEdit);
     pushButton->setVisible(false);
+
+    QLabel *label = getLabelInRow(valueEdit);
+    label->setVisible(false);
 }
 
-QPushButton* MainWindow::getPushButtonInRow(QLineEdit *valueEdit) const
+QPushButton *MainWindow::getPushButtonInRow(QLineEdit *valueEdit) const
 {
     const QHBoxLayout *layout = valueEdit->property("managingLayout").value<QHBoxLayout *>();
     return static_cast<QPushButton *>(layout->itemAt(2)->widget());
+}
+
+QLabel *MainWindow::getLabelInRow(QLineEdit *valueEdit) const
+{
+    const QHBoxLayout *layout = valueEdit->property("managingLayout").value<QHBoxLayout *>();
+    return static_cast<QLabel *>(layout->itemAt(3)->widget());
 }
 
 QLineEdit *MainWindow::getLineEditInRow(QComboBox *comboBox) const

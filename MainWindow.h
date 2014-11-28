@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QHBoxLayout>
 #include <QComboBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSignalMapper>
@@ -44,6 +45,7 @@ private:
     void activateValueEdit(QLineEdit *valueEdit);
     void deactivateValueEdit(QLineEdit *valueEdit);
     QPushButton *getPushButtonInRow(QLineEdit *valueEdit) const;
+    QLabel *getLabelInRow(QLineEdit *valueEdit) const;
     QLineEdit *getLineEditInRow(QComboBox *comboBox) const;
 
 private slots:

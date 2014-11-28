@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>804</width>
-    <height>510</height>
+    <width>901</width>
+    <height>499</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,6 +39,12 @@
           </property>
           <item row="0" column="0" colspan="2">
            <widget class="QGroupBox" name="groupBoxStates">
+            <property name="minimumSize">
+             <size>
+              <width>440</width>
+              <height>0</height>
+             </size>
+            </property>
             <property name="title">
              <string>States</string>
             </property>
@@ -74,8 +80,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>379</width>
-                  <height>347</height>
+                  <width>436</width>
+                  <height>336</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayoutStates">
@@ -139,7 +145,14 @@
           </property>
           <layout class="QGridLayout" name="gridLayout">
            <item row="0" column="0" colspan="2">
-            <widget class="QTextBrowser" name="textBrowserLogging"/>
+            <widget class="QTextBrowser" name="textBrowserLogging">
+             <property name="minimumSize">
+              <size>
+               <width>400</width>
+               <height>200</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="1" column="1">
             <widget class="QPushButton" name="pushButtonEraseLog">
@@ -210,7 +223,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>804</width>
+     <width>901</width>
      <height>24</height>
     </rect>
    </property>
