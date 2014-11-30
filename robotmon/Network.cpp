@@ -35,6 +35,7 @@ void Network::disconnect()
 void Network::send()
 {
     socket.write(sendArray);
+    sendArray.clear();
 }
 
 void Network::handleError(QAbstractSocket::SocketError socketError)
