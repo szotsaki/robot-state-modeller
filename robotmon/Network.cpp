@@ -4,6 +4,7 @@ Network::Network()
     : receiveStream(&socket),
       sendStream(sendArray)
 {
+    QObject::connect(&socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleError(QAbstractSocket::SocketError)));
 }
 
 bool Network::connected() const
@@ -24,8 +25,6 @@ QDataStream & Network::getReceiveStream()
 void Network::connect()
 {
     socket.connectToHost("localhost", 9999);
-
-//    connect(&socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleError(QAbstractSocket::SocketError)));
 }
 
 void Network::disconnect()

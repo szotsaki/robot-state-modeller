@@ -5,12 +5,13 @@ Monitor::Monitor() :
     blockSize(0)
 {
     connect(&network, &Network::errorOccurred, this, &Monitor::errorOccurred);
+    network.connect();
 }
 
 void Monitor::receive()
 {
     QDataStream &inStream = network.getReceiveStream();
-    QTcpSocket *socket = static_cast<QTcpSocket *>(inStream.device());
+    QIODevice *socket = inStream.device();
 
     // It's a new block
     if (blockSize == 0) {
