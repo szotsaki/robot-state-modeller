@@ -1,18 +1,7 @@
 #include "RobotSim.h"
+#include <algorithm>
 #include <assert.h>
 #include <math.h>
-
-typedef enum
-{
-    kD_Sync = 0,
-    kD_Estop,
-    kD_Velocity,
-    kD_Accel,
-    kD_SteerAng,
-    kD_LightSen,
-    kD_DistSen,
-    kD_SmState
-} dataId_t;
 
 const int RobotSim::kUpdateDiffMs = 50;
 const int RobotSim::kSendDiffMs = 100;
@@ -20,23 +9,14 @@ const int RobotSim::kSendDiffMs = 100;
 RobotSim::RobotSim()
  : needSync(false),
    estop(false),
-   stateHasCmd(false),
-   velocityHasCmd(false),
-   accelerationHasCmd(false),
-   steerAngleHasCmd(false),
-   ctlSignalHasCmd(false)
+   state(kD_SmState, 0, 8, 0),
+   velocity(kD_Velocity, -8.0, 10.0, 0.0, 0.2),
+   acceleration(kD_Accel, -3.0, 5.0, 0.0, 0.1),
+   steerAngle(kD_SteerAng, -65.0, 65.0, 0.0, 2.5),
+   ctlSignal(kD_CtlSignal, -100.0, 100.0, 0.0, 20.0)
 {
     lastUpdate = QDateTime::currentDateTime();
     lastSend = lastUpdate;
-
-    // Reset states.
-    resetData(state, 0);
-    resetData(velocity, 0.0);
-    resetData(acceleration, 0.0);
-    resetData(steerAngle, 0.0);
-    resetData(ctlSignal, 0.0);
-    resetDataVec(distSensor, 3, 0.0);
-    resetDataVec(lightSensor, 8, 0);
 }
 
 void RobotSim::Do_a_Step()
@@ -62,23 +42,23 @@ void RobotSim::Do_a_Step()
 
 void RobotSim::update()
 {
-    updateData(state, stateHasCmd);
-    updateData(velocity, velocityHasCmd);
-    updateData(acceleration, accelerationHasCmd);
-    updateData(ctlSignal, ctlSignalHasCmd);
-    updateData(steerAngle, steerAngleHasCmd);
-    updateDataVec(distSensor);
-    updateDataVec(lightSensor);
+    state.update(estop);
+    velocity.update(estop);
+    acceleration.update(estop);
+    ctlSigna.update(estop);
+    steerAngl.update(estop);
+    distSensor.update(estop);
+    lightSensor(estop);
 }
 
 void RobotSim::send()
 {
-    writeData(state);
-    writeData(velocity);
-    writeData(acceleration);
-    writeData(steerAngle);
-    writeDataVec(distSensor);
-    writeDataVec(lightSensor);
+    state.write(needSync);
+    velocity.write(needSync);
+    acceleration.write(needSync);
+    steerAngle.write(needSync);
+    distSensor.write(needSync);
+    lightSensor.write(needSync);
     if (!buffer.empty())
     {
         send(buffer);
@@ -104,100 +84,6 @@ void RobotSim::receive()
     }
 }
 
-void RobotSim::resetData(int32_t *rw_data, const int32_t value)
-{
-    rw_data[ROB_STA_ACTUAL] = rw_data[ROB_STA_LASTSENT]
-                              = rw_data[ROB_STA_GOAL] = value;
-}
-
-void RobotSim::resetData(double *rw_data, const double value)
-{
-    rw_data[ROB_STA_ACTUAL] = rw_data[ROB_STA_LASTSENT]
-                              = rw_data[ROB_STA_GOAL] = value;
-}
-
-void RobotSim::resetDataVec(std::vector<int32_t> *w_data,
-                            const size_t n,
-                            const int32_t value)
-{
-    w_data[ROB_STA_ACTUAL].resize(n);
-    w_data[ROB_STA_LASTSENT].resize(n);
-    for (size_t i = 0; i < n; ++i)
-    {
-        w_data[ROB_STA_ACTUAL][i] = w_data[ROB_STA_LASTSENT][i] = value;
-    }
-}
-
-void RobotSim::resetDataVec(std::vector<double> *w_data,
-                            const size_t n,
-                            const double value)
-{
-    w_data[ROB_STA_ACTUAL].resize(n);
-    w_data[ROB_STA_LASTSENT].resize(n);
-    for (size_t i = 0; i < n; ++i)
-    {
-        w_data[ROB_STA_ACTUAL][i] = w_data[ROB_STA_LASTSENT][i] = value;
-    }
-}
-
-void RobotSim::updateData(int32_t *rw_data, bool &hasCmd)
-{
-    if (!hasCmd && !estop && rand(ROB_RP_CHANGE_GOAL) == 0)
-    {
-        rw_data[ROB_STA_GOAL] = rand(min, max);
-    }
-    if (rw_data[ROB_STA_ACTUAL] != rw_data[ROB_STA_GOAL])
-    {
-        rw_data[ROB_STA_ACTUAL] = rw_data[ROB_STA_GOAL];
-        hasCmd = false;
-    }
-}
-
-void RobotSim::updateData(double *rw_data, bool &hasCmd)
-{
-    if (!hasCmd && !estop && rand(ROB_RP_CHANGE_GOAL) == 0)
-    {
-        rw_data[ROB_STA_GOAL] = rand(min, max);
-    }
-    if (rw_data[ROB_STA_ACTUAL] != rw_data[ROB_STA_GOAL])
-    {
-        double diff = (rw_data[ROB_STA_GOAL] - rw_data[ROB_STA_GOAL]) * 0.8;
-        diff = clampMaxAbs(diff, kMaxDiff);
-        rw_data[ROB_STA_ACTUAL] += diff;
-
-        if (hasCmd && rw_data[ROB_STA_ACTUAL] == rw_data[ROB_STA_GOAL])
-        {
-            hasCmd = false;
-        }
-    }
-}
-
-void RobotSim::writeData(int32_t *rw_data)
-{
-    if (rw_data[ROB_STA_ACTUAL] != rw_data[ROB_STA_LASTSENT]
-        || needSync)
-    {
-        int size = 12;
-        writeInteger(size);
-        writeInteger(type);
-        writeInteger(rw_data[ROB_STA_ACTUAL]);
-        rw_data[ROB_STA_LASTSENT] = rw_data[ROB_STA_ACTUAL];
-    }
-}
-
-void RobotSim::writeData(double *rw_data)
-{
-    if (rw_data[ROB_STA_ACTUAL] != rw_data[ROB_STA_LASTSENT]
-        || needSync)
-    {
-        int size = 16;
-        writeInteger(size);
-        writeInteger(type);
-        writeDouble(rw_data[ROB_STA_ACTUAL]);
-        rw_data[ROB_STA_LASTSENT] = rw_data[ROB_STA_ACTUAL];
-    }
-}
-
 void RobotSim::processRecvData(const char *buffer)
 {
     int32_t type = readInteger();
@@ -208,49 +94,30 @@ void RobotSim::processRecvData(const char *buffer)
         break;
     case kD_Estop:
         estop = true;
-        velocity[ROB_STA_GOAL] = 0.0;
-        acceleration[ROB_STA_GOAL] = 0.0;
-        steerAngle[ROB_STA_GOAL] = 0.0;
-        ctlSignal[ROB_STA_GOAL] = 0.0;
+        velocity.setEstop();
+        acceleration.setEstop();
+        steerAngle.setEstop();
+        ctlSignal.setEstop();
         break;
     case kD_Velocity:
         estop = false;
-        velocity[ROB_STA_GOAL] = readDouble();
-        velocityHasCmd = true;
+        velocity.read();
         break;
     case kD_Accel:
         estop = false;
-        acceleration[ROB_STA_GOAL] = readDouble();
-        accelerationHasCmd = true;
+        acceleration.read();
         break;
     case kD_SteerAng:
         estop = false;
-        steerAngle[ROB_STA_GOAL] = readDouble();
-        steerAngleHasCmd = true;
+        steerAngle.read();
         break;
     case kD_SmState:
         estop = false;
-        state[ROB_STA_GOAL] = readInteger();
-        stateHasCmd = true;
+        state.read();
         break;
     default:
         assert(0 && "Unknown data id received.");
         break;
     }
-}
-
-double RobotSim::clampMaxAbs(const double d, const double dMaxAbs)
-{
-    double res = d;
-    if (abs(d) > dMaxAbs)
-    {
-        res *= dMaxAbs / abs(d);
-    }
-    return res;
-}
-
-double RobotSim::clamp(const double d, const double dMin, const double dMax)
-{
-    return min(dMax, max(dMin, d));
 }
 
