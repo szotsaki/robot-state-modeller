@@ -3,7 +3,6 @@
 
 #include <QDataStream>
 #include "../ValueWrapper.h"
-#include "DataInterface.h"
 
 enum class commandProgress_t
 {
@@ -46,10 +45,6 @@ inline void Command<T>::serialise(QDataStream &outStream)
 {
     outStream << value;
     progress = commandProgress_t::kInProgress;
-
-    const quint32 size = sizeof(quint32) + sizeof(dataId_t) + sizeof(value);
-    outStream.device()->seek(0);
-    outStream << size;
 }
 
 template<typename T>

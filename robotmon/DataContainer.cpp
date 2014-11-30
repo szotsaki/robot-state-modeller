@@ -33,11 +33,17 @@ void DataContainer::sendCommand(const dataId_t dataId,
                                 const ValueWrapper &value,
                                 QDataStream &outStream)
 {
-    const quint32 size = 0;
-    outStream << size;
-    outStream << dataId;    // Serialize data identifier.
+    const qint64 startPos = outStream.device()->size();
+    qint32 msgSize = 0;
+    outStream << msgSize;
+    outStream << (int32_t)dataId;    // Serialize data identifier.
     data[dataId]->setCommand(value);
     data[dataId]->sendCommand(outStream, false);
+    const qint64 endPos = outStream.device()->size();
+    outStream.device()->seek(startPos);
+    msgSize = endPos - startPos;
+    outStream << msgSize;
+    outStream.device()->seek(endPos);
 }
 
 void DataContainer::sync(QDataStream &outStream)
