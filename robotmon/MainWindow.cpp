@@ -42,9 +42,10 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 void MainWindow::createSignalSlotConnections()
 {
     connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::close);
-    connect(ui->pushButtonEmergencyStop, &QPushButton::pressed, &monitor, &Monitor::emergencyStop);
-    connect(ui->pushButtonSynchronise, &QPushButton::pressed, &monitor, &Monitor::sync);
+    connect(ui->pushButtonEmergencyStop, &QPushButton::pressed, this, &MainWindow::emergencyStopPressed);
+    connect(ui->pushButtonSynchronise, &QPushButton::pressed, this, &MainWindow::syncPressed);
     connect(ui->pushButtonEraseLog, &QPushButton::pressed, this, &MainWindow::eraseLog);
+    connect(&monitor, &Monitor::errorOccurred, this, &MainWindow::writeLogLine);
 
     const auto newValueReceived1 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram1, ui->plot1);};
     connect(&monitor, &Monitor::newValueReceived, this, newValueReceived1);
@@ -189,6 +190,27 @@ void MainWindow::newValueReceived(const dataId_t receivedDataId, const QComboBox
     }
 }
 
+void MainWindow::newValueReceived(const dataId_t receivedDataId)
+{
+    const QString dataName = QString::fromStdString(monitor.getDataIdText(receivedDataId));
+    const QString newValue = QString::fromStdString(monitor.getDataValueText(receivedDataId));
+    const QString logEntry = dataName + " changed to " + newValue;
+
+    writeLogLine(logEntry);
+}
+
+void MainWindow::emergencyStopPressed()
+{
+    writeLogLine("Emergency stop began");
+    monitor.emergencyStop();
+}
+
+void MainWindow::syncPressed()
+{
+    writeLogLine("Synchronisation began");
+    monitor.sync();
+}
+
 void MainWindow::sendNewValue(QComboBox *comboBox, QLineEdit *lineEdit)
 {
     const ValueWrapperFactory wrapperFactory;
@@ -222,5 +244,14 @@ void MainWindow::comboBoxIndexChanged(QComboBox *comboBox, QLineEdit *lineEdit)
 
 void MainWindow::eraseLog()
 {
-    ui->textBrowserLogging->setText(QString::null);
+    ui->textEditLogging->setText(QString::null);
+}
+
+void MainWindow::writeLogLine(const QString &string)
+{
+    const QTime currentTime = QTime::currentTime();
+    const QString currentTimeString = currentTime.toString("hh:mm:ss");
+    const QString appendedString = "<b>" + currentTimeString + ": </b>" + string;
+
+    ui->textEditLogging->append(appendedString);
 }

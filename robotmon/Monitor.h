@@ -36,7 +36,8 @@ public slots:
     void emergencyStop();
 
 signals:
-    void newValueReceived(dataId_t dataId);
+    void newValueReceived(dataId_t);
+    void errorOccurred(const QString &);
 
 private:
     DataContainer dataContainer;

@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QStringList>
+#include <QTime>
 #include <QDebug>
 
 #include "Monitor.h"
@@ -49,7 +50,11 @@ private:
 private slots:
     void addBlankStateRowByCb(int index);
     void comboBoxIndexChanged(QComboBox *comboBox, QLineEdit *lineEdit);
+    void newValueReceived(const dataId_t receivedDataId);
+    void emergencyStopPressed();
+    void syncPressed();
     void eraseLog();
+    void writeLogLine(const QString& string);
 
 };
 
