@@ -1,4 +1,5 @@
 #include "RobotSim.h"
+#include "Sleep.h"
 
 int main(int argc, char **argv)
 {
@@ -6,7 +7,7 @@ int main(int argc, char **argv)
     while (true)
     {
         r.Do_a_Step();
-        sleep(50);
+        r_sleepMs(50);
     }
     return 0;
 }

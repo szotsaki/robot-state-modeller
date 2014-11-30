@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include <vector>
+#include <QDateTime>
 
 #define ROB_STA_ACTUAL      0   // Actual state value.
 #define ROB_STA_LASTSENT    1   // Last sent value of state.
@@ -13,7 +14,7 @@
 
 /**
  * Simulator of an actual robot for testing purposes.
- * Handles network connection and data simulation of its own.
+ * Handles network connection and data simulation on its own.
  */
 class RobotSim
 {
@@ -23,6 +24,11 @@ public:
     void        Do_a_Step();
 
 private:
+    typedef RobotSim    _MyT;
+
+    static const int kUpdateDiffMs;
+    static const int kSendDiffMs;
+
     void        update();
     void        send();
     void        receive();
@@ -43,8 +49,8 @@ private:
     double      clampMaxAbs(const double d, const double dMaxAbs);
     double      clamp(const double d, const double dMin, const double dMax);
 
-    Timestamp   lastUpdate;
-    Timestamp   lastSend;
+    QDateTime   lastUpdate;
+    QDateTime   lastSend;
 
     bool        needSync;
     bool        estop;

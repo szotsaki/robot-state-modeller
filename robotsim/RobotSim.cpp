@@ -14,6 +14,9 @@ typedef enum
     kD_SmState
 } dataId_t;
 
+const int RobotSim::kUpdateDiffMs = 50;
+const int RobotSim::kSendDiffMs = 100;
+
 RobotSim::RobotSim()
  : needSync(false),
    estop(false),
@@ -23,10 +26,8 @@ RobotSim::RobotSim()
    steerAngleHasCmd(false),
    ctlSignalHasCmd(false)
 {
-    Timestamp actual;
-    getActualTime(actual);
-    lastUpdate = actual;
-    lastSend = actual;
+    lastUpdate = QDateTime::currentDateTime();
+    lastSend = lastUpdate;
 
     // Reset states.
     resetData(state, 0);
@@ -43,17 +44,16 @@ void RobotSim::Do_a_Step()
     if (socket.hasNoConn()) accept();
     receive();
 
-    Timestamp actual;
-    getActualTime(actual);
-    int updDiff = actual - lastUpdate;
-    int sendDiff = actual - lastSend;
+    QDateTime actual = QDateTime::currentDateTime();
+    qint64 updDiffMs = lastUpdate.msecsTo(actual);
+    qint64 sendDiffMs = lastSend.msecsTo(actual);
 
-    if (updDiff >= kUpdateDiff)
+    if (updDiffMs >= _MyT::kUpdateDiffMs)
     {
         update();
         lastUpdate = actual;
     }
-    if (sendDiff >= kSendDiff)
+    if (sendDiffMs >= _MyT::kSendDiffMs)
     {
         send();
         lastSend = actual;
