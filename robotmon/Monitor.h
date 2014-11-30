@@ -38,6 +38,9 @@ public slots:
     void sync();
     void emergencyStop();
 
+signals:
+    void newValueReceived(dataId_t dataId);
+
 private:
     DataContainer dataContainer;
     Network network;

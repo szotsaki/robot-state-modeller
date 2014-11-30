@@ -9,11 +9,11 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QSignalMapper>
 #include <QStringList>
 #include <QDebug>
 
 #include "Monitor.h"
+#include "ValueWrapperFactory.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,7 +31,6 @@ protected:
     bool eventFilter(QObject *object, QEvent *event);
 
 private:
-    QSignalMapper signalMapper;
     Ui::MainWindow *ui;
     Monitor monitor;
 
@@ -42,15 +41,14 @@ private:
     void enableValueRefreshing(QLineEdit *valueEdit);
     void enableValueColor(QLineEdit *valueEdit);
     void disableValueColor(QLineEdit *valueEdit);
-    void activateValueEdit(QLineEdit *valueEdit);
-    void deactivateValueEdit(QLineEdit *valueEdit);
-    QPushButton *getPushButtonInRow(QLineEdit *valueEdit) const;
-    QLabel *getLabelInRow(QLineEdit *valueEdit) const;
-    QLineEdit *getLineEditInRow(QComboBox *comboBox) const;
+    void activateValueEdit(QLineEdit *valueEdit, QPushButton *pushButton, QLabel *label);
+    void deactivateValueEdit(QLineEdit *valueEdit, QPushButton *pushButton, QLabel *label);
+    void newValueReceived(dataId_t receivedDataId, QComboBox *comboBox, QLineEdit *lineEdit);
+    void sendNewValue(QComboBox *comboBox, QLineEdit *lineEdit);
 
 private slots:
     void addBlankStateRowByCb(int index);
-    void comboBoxIndexChanged(QComboBox *comboBox);
+    void comboBoxIndexChanged(QComboBox *comboBox, QLineEdit *lineEdit);
     void eraseLog();
 
 };

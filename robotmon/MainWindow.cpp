@@ -22,7 +22,12 @@ MainWindow::~MainWindow()
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::FocusIn && object->isWidgetType()) {
-        activateValueEdit(qobject_cast<QLineEdit *>(object));
+        QLineEdit *valueEdit = qobject_cast<QLineEdit *>(object);
+        const QHBoxLayout *layout = valueEdit->property("managingLayout").value<QHBoxLayout *>();
+        QPushButton *pushButton = static_cast<QPushButton *>(layout->itemAt(2)->widget());
+        QLabel *label = static_cast<QLabel *>(layout->itemAt(3)->widget());
+
+        activateValueEdit(valueEdit, pushButton, label);
         return true;
     }
 
@@ -49,7 +54,6 @@ void MainWindow::addBlankStateRow()
         const QString name = QString::fromStdString(monitor.getDataIdText(dataId));
         combobox->addItem(name, QVariant::fromValue(dataId));
     }
-    combobox->setProperty("managingLayout", QVariant::fromValue(layout));
 
     // Adding QLineEdit
     QLineEdit *lineEdit = new QLineEdit;
@@ -84,13 +88,22 @@ void MainWindow::addBlankStateRow()
 
 
     // Connect signals of the row
-    const auto comboBoxIndexChanged = [this, combobox] {this->comboBoxIndexChanged(combobox);};
-    connect(combobox, currentIndexChanged, this, comboBoxIndexChanged);
     connect(combobox, currentIndexChanged, this, &MainWindow::addBlankStateRowByCb);
+
+    const auto comboBoxIndexChanged = [=] {this->comboBoxIndexChanged(combobox, lineEdit);};
+    connect(combobox, currentIndexChanged, this, comboBoxIndexChanged);
+
     const auto deleteRow = [this, layout] (int index) {if (index == 0) {this->deleteStateRow(layout);}};
     connect(combobox, currentIndexChanged, this, deleteRow);
-    const auto deactivateValueEdit = [this, lineEdit] {this->deactivateValueEdit(lineEdit);};
+
+    const auto newValueReceived = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, combobox, lineEdit);};
+    connect(&monitor, &Monitor::newValueReceived, this, newValueReceived);
+
+    const auto deactivateValueEdit = [=] {this->deactivateValueEdit(lineEdit, pushButton, label);};
     connect(pushButton, &QPushButton::pressed, this, deactivateValueEdit);
+
+    const auto sendNewValue = [=] {this->sendNewValue(combobox, lineEdit);};
+    connect(pushButton, &QPushButton::pressed, this, sendNewValue);
 }
 
 void MainWindow::deleteStateRow(QHBoxLayout *row)
@@ -112,53 +125,46 @@ void MainWindow::disableValueColor(QLineEdit *valueEdit)
     valueEdit->setStyleSheet("");
 }
 
-void MainWindow::activateValueEdit(QLineEdit *valueEdit)
+void MainWindow::activateValueEdit(QLineEdit *valueEdit, QPushButton *pushButton, QLabel *label)
 {
     if (valueEdit->isReadOnly()) {
         return;
     }
 
     disableValueRefreshing(valueEdit);
-
-    QPushButton *pushButton = getPushButtonInRow(valueEdit);
     pushButton->setVisible(true);
-
-    QLabel *label = getLabelInRow(valueEdit);
     label->setText("[" + valueEdit->text() + "]");
     label->setVisible(true);
 }
 
-void MainWindow::deactivateValueEdit(QLineEdit *valueEdit)
+void MainWindow::deactivateValueEdit(QLineEdit *valueEdit, QPushButton *pushButton, QLabel *label)
 {
     if (valueEdit->isReadOnly()) {
         return;
     }
 
     enableValueRefreshing(valueEdit);
-
-    QPushButton *pushButton = getPushButtonInRow(valueEdit);
     pushButton->setVisible(false);
-
-    QLabel *label = getLabelInRow(valueEdit);
     label->setVisible(false);
 }
 
-QPushButton *MainWindow::getPushButtonInRow(QLineEdit *valueEdit) const
+void MainWindow::newValueReceived(dataId_t receivedDataId, QComboBox *comboBox, QLineEdit *lineEdit)
 {
-    const QHBoxLayout *layout = valueEdit->property("managingLayout").value<QHBoxLayout *>();
-    return static_cast<QPushButton *>(layout->itemAt(2)->widget());
+    const dataId_t currentDataId = comboBox->currentData().value<dataId_t>();
+    if (receivedDataId == currentDataId) {
+        const QString newValue = QString::fromStdString(monitor.getDataValueText(currentDataId));
+        lineEdit->setText(newValue);
+    }
 }
 
-QLabel *MainWindow::getLabelInRow(QLineEdit *valueEdit) const
+void MainWindow::sendNewValue(QComboBox *comboBox, QLineEdit *lineEdit)
 {
-    const QHBoxLayout *layout = valueEdit->property("managingLayout").value<QHBoxLayout *>();
-    return static_cast<QLabel *>(layout->itemAt(3)->widget());
-}
-
-QLineEdit *MainWindow::getLineEditInRow(QComboBox *comboBox) const
-{
-    const QHBoxLayout *layout = comboBox->property("managingLayout").value<QHBoxLayout *>();
-    return static_cast<QLineEdit *>(layout->itemAt(1)->widget());
+    const ValueWrapperFactory wrapperFactory;
+    const dataId_t dataID = comboBox->currentData().value<dataId_t>();
+    const QString value = lineEdit->text();
+    const ValueWrapper *wrapper = wrapperFactory.create(dataID, value.toStdString());
+    monitor.send(dataID, *wrapper);
+    delete wrapper;
 }
 
 void MainWindow::disableValueRefreshing(QLineEdit *valueEdit)
@@ -181,7 +187,7 @@ void MainWindow::addBlankStateRowByCb(int index)
     addBlankStateRow();
 }
 
-void MainWindow::comboBoxIndexChanged(QComboBox *comboBox)
+void MainWindow::comboBoxIndexChanged(QComboBox *comboBox, QLineEdit *lineEdit)
 {
     // The first one is always empty
     const int index = comboBox->currentIndex();
@@ -189,9 +195,6 @@ void MainWindow::comboBoxIndexChanged(QComboBox *comboBox)
         return;
     }
 
-    const dataId_t dataID = comboBox->currentData().value<dataId_t>();
-
-    QLineEdit *lineEdit = getLineEditInRow(comboBox);
     lineEdit->setReadOnly(false);
 }
 

@@ -29,7 +29,7 @@ ValueWrapper * ValueWrapperFactory::create(const dataId_t dataId,
     case kDvt_Int32Vec:
     case kDvt_Float64Vec:
     default:
-        Q_ASSERT(0);
+        Q_UNREACHABLE();
         break;
     }
     return wrapper;
