@@ -47,8 +47,8 @@ void RobotSim::update()
     acceleration.update(estop);
     ctlSigna.update(estop);
     steerAngl.update(estop);
-    updateDataVec(distSensor);
-    updateDataVec(lightSensor);
+    distSensor.update(estop);
+    lightSensor(estop);
 }
 
 void RobotSim::send()
@@ -57,8 +57,8 @@ void RobotSim::send()
     velocity.write(needSync);
     acceleration.write(needSync);
     steerAngle.write(needSync);
-    writeDataVec(distSensor, kD_DistSen);
-    writeDataVec(lightSensor, kD_LightSen);
+    distSensor.write(needSync);
+    lightSensor.write(needSync);
     if (!buffer.empty())
     {
         send(buffer);
@@ -81,30 +81,6 @@ void RobotSim::receive()
         buffer = readBytes(nextCmdSize);
         processRecvData(buffer);
         --recvCount;
-    }
-}
-
-void RobotSim::resetDataVec(std::vector<int32_t> *w_data,
-                            const size_t n,
-                            const int32_t value)
-{
-    w_data[ROB_STA_ACTUAL].resize(n);
-    w_data[ROB_STA_LASTSENT].resize(n);
-    for (size_t i = 0; i < n; ++i)
-    {
-        w_data[ROB_STA_ACTUAL][i] = w_data[ROB_STA_LASTSENT][i] = value;
-    }
-}
-
-void RobotSim::resetDataVec(std::vector<double> *w_data,
-                            const size_t n,
-                            const double value)
-{
-    w_data[ROB_STA_ACTUAL].resize(n);
-    w_data[ROB_STA_LASTSENT].resize(n);
-    for (size_t i = 0; i < n; ++i)
-    {
-        w_data[ROB_STA_ACTUAL][i] = w_data[ROB_STA_LASTSENT][i] = value;
     }
 }
 
@@ -143,15 +119,5 @@ void RobotSim::processRecvData(const char *buffer)
         assert(0 && "Unknown data id received.");
         break;
     }
-}
-
-double RobotSim::clampMaxAbs(const double d, const double dMaxAbs)
-{
-    double res = d;
-    if (abs(d) > dMaxAbs)
-    {
-        res *= dMaxAbs / abs(d);
-    }
-    return res;
 }
 

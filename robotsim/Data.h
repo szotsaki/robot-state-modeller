@@ -1,21 +1,8 @@
 #ifndef ROBOTSIM__DATA_H
 #define ROBOTSIM__DATA_H
 
-#include <array>
 #include <inttypes.h>
-
-typedef enum
-{
-    kD_Sync = 0,
-    kD_Estop,
-    kD_Velocity,
-    kD_Accel,
-    kD_SteerAng,
-    kD_LightSen,
-    kD_DistSen,
-    kD_SmState,
-    kD_CtlSignal
-} dataId_t;
+#include "DataCommon.h"
 
 /**
  * Represents a readable+writable 32bit integer data of the robot simulator.
@@ -33,8 +20,6 @@ public:
     void    read();
 
 private:
-    int32_t clamp(const int32_t d, const int32_t dMin, const int32_t dMax);
-
     const dataId_t  dataId;
     const int32_t   minValue;
     const int32_t   maxValue;
@@ -63,9 +48,6 @@ public:
     void    setEstop();
 
 private:
-    double  clampMaxAbs(const double d, const double dMaxAbs);
-    double  clamp(const double d, const double dMin, const double dMax);
-
     const dataId_t  dataId;
     const double    minValue;
     const double    maxValue;

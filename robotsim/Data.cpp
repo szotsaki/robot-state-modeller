@@ -1,5 +1,4 @@
 #include "Data.h"
-#include <algorithm>
 
 DataInt::DataInt(const dataId_t id,
                  const int32_t minVal,
@@ -43,11 +42,6 @@ void DataInt::read()
 {
     goal = clamp(readInteger(), minValue, maxValue);
     hasCmd = true;
-}
-
-int32_t DataInt::clamp(const int32_t d, const int32_t dMin, const int32_t dMax)
-{
-    return std::min(dMax, std::max(dMin, d));
 }
 
 DataDouble::DataDouble(const dataId_t id,
@@ -99,20 +93,5 @@ void DataDouble::write(const bool needSync)
 void DataDouble::setEstop()
 {
     goal = 0.0;
-}
-
-double DataDouble::clamp(const double d, const double dMin, const double dMax)
-{
-    return std::min(dMax, std::max(dMin, d));
-}
-
-double DataDouble::clampMaxAbs(const double d, const double dMaxAbs)
-{
-    double res = d;
-    if (abs(d) > dMaxAbs)
-    {
-        res *= dMaxAbs / abs(d);
-    }
-    return res;
 }
 

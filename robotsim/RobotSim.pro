@@ -16,12 +16,15 @@ TEMPLATE = app
 
 SOURCES  += \
     Data.cpp \
+    DataVec.cpp \
     Main.cpp \
     RobotSim.cpp \
     Sleep.cpp
 
 HEADERS  += \
     Data.h \
+    DataCommon.h \
+    DataVec.h \
     RobotSim.h \
     Sleep.h
 
