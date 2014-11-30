@@ -2,6 +2,7 @@
 #define DATA_VEC_READ_ONLY_H_
 
 #include <QDataStream>
+#include <QVector>
 #include <sstream>
 #include "../QCircularBuffer.h"
 #include "../ValueWrapper.h"
@@ -17,7 +18,7 @@
 template<typename T>
 class DataVecReadOnly : public DataInterface
 {
-    typedef std::vector< T >	_MyVal;
+    typedef QVector< T >	_MyVal;
     typedef State< _MyVal >		_MyState;
 
 public:

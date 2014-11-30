@@ -33,6 +33,8 @@ void DataContainer::sendCommand(const dataId_t dataId,
                                 const ValueWrapper &value,
                                 QDataStream &outStream)
 {
+    const quint32 size = 0;
+    outStream << size;
     outStream << dataId;    // Serialize data identifier.
     data[dataId]->setCommand(value);
     data[dataId]->sendCommand(outStream, false);
