@@ -2,7 +2,7 @@
 
 Network::Network()
     : receiveStream(&socket),
-      sendStream(sendArray)
+      sendStream(&sendArray, QIODevice::WriteOnly)
 {
     QObject::connect(&socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleError(QAbstractSocket::SocketError)));
 }
@@ -24,7 +24,7 @@ QDataStream & Network::getReceiveStream()
 
 void Network::connect()
 {
-    socket.connectToHost("localhost", 9999);
+    socket.connectToHost("localhost", 9999, QIODevice::ReadWrite);
 }
 
 void Network::disconnect()
