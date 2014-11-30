@@ -14,11 +14,14 @@ TARGET = RobotSim
 TEMPLATE = app
 
 
-SOURCES += Main.cpp\
+SOURCES  += \
+    Data.cpp \
+    Main.cpp \
     RobotSim.cpp \
     Sleep.cpp
 
 HEADERS  += \
+    Data.h \
     RobotSim.h \
     Sleep.h
 
