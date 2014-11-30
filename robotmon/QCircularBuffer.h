@@ -42,6 +42,7 @@
 #ifndef QCIRCULARBUFFER_H
 #define QCIRCULARBUFFER_H
 
+#include <cstring>
 #include <QtCore/qlist.h>
 #include <QtCore/qpair.h>
 #include <QtCore/qshareddata.h>
@@ -1280,7 +1281,7 @@ void QCircularBuffer<T>::setCapacity(int capacity)
         }
 
         // Initialise any memory outside of the valid buffer (ie the unused items)
-        qMemSet(newData + newSize, 0, (capacity - newSize) * sizeof(T));
+        std::memset(newData + newSize, 0, (capacity - newSize) * sizeof(T));
     }
 
     // Release the raw memory for the old array

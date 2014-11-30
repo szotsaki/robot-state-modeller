@@ -11,7 +11,6 @@ class State
 public:
     T getValue() const;
 	void deserialise(QDataStream& stream);
-	void draw();
 
 private:
     QDateTime timestamp;
@@ -28,15 +27,8 @@ inline T State<T>::getValue() const
 template<typename T>
 inline void State<T>::deserialise(QDataStream &inStream)
 {
-    Q_UNUSED(inStream);
-    //inStream >> value;
+    inStream >> value;
     timestamp = QDateTime::currentDateTime();
-}
-
-template<typename T>
-inline void State<T>::draw()
-{
-    // TODO: implement.
 }
 
 #endif // STATE_H_
