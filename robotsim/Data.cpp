@@ -28,21 +28,23 @@ void DataInt::update(const bool estop)
     }
 }
 
-void DataInt::write(const bool needSync)
+void DataInt::write(QDataStream &outStream, const bool needSync)
 {
     if (actual != lastSent || needSync)
     {
-        int size = 12;
-        writeInteger(size);
-        writeInteger(dataId);
-        writeInteger(actual);
+        int32_t size = 12;
+        outStream << size;
+        outStream <<  (int32_t)dataId;
+        outStream << actual;
         lastSent = actual;
     }
 }
 
-void DataInt::read()
+void DataInt::read(QDataStream &inStream)
 {
-    goal = clamp(readInteger(), minValue, maxValue);
+    int32_t val;
+    inStream >> val;
+    goal = clamp(val, minValue, maxValue);
     hasCmd = true;
 }
 
@@ -81,16 +83,24 @@ void DataDouble::update(const bool estop)
     }
 }
 
-void DataDouble::write(const bool needSync)
+void DataDouble::write(QDataStream &outStream, const bool needSync)
 {
     if (actual != lastSent || needSync)
     {
         int size = 16;
-        writeInteger(size);
-        writeInteger(dataId);
-        writeDouble(actual);
+        outStream << size;
+        outStream <<  (int32_t)dataId;
+        outStream << actual;
         lastSent = actual;
     }
+}
+
+void DataDouble::read(QDataStream &inStream)
+{
+    double val;
+    inStream >> val;
+    goal = clamp(val, minValue, maxValue);
+    hasCmd = true;
 }
 
 void DataDouble::setEstop()

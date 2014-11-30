@@ -2,6 +2,7 @@
 #define ROBOTSIM__DATA_H
 
 #include <stdint.h>
+#include <QDataStream>
 #include "DataCommon.h"
 
 /**
@@ -16,8 +17,8 @@ public:
             const int32_t init);
 
     void    update(const bool estop);
-    void    write(const bool needSync);
-    void    read();
+    void    write(QDataStream &outStream, const bool needSync);
+    void    read(QDataStream &inStream);
 
 private:
     const dataId_t  dataId;
@@ -43,8 +44,8 @@ public:
                const double maxDiff);
 
     void    update(const bool estop);
-    void    write(const bool needSync);
-    void    read();
+    void    write(QDataStream &outStream, const bool needSync);
+    void    read(QDataStream &inStream);
     void    setEstop();
 
 private:

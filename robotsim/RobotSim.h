@@ -5,16 +5,22 @@
 #include "Data.h"
 #include "DataVec.h"
 
+class QDataStream;
+class QTcpServer;
+class QTcpSocket;
+
 /**
  * Simulator of an actual robot for testing purposes.
  * Handles network connection and data simulation on its own.
  */
-class RobotSim
+class RobotSim : public QObject
 {
+    Q_OBJECT
+
 public:
     RobotSim();
 
-    void        Do_a_Step();
+    void        		Do_a_Step();
 
 private:
     typedef RobotSim    _MyT;
@@ -26,7 +32,7 @@ private:
     void                send();
     void                receive();
 
-    void                processRecvData(const char *buffer);
+    void                processRecvData(QDataStream &inStream);
 
     QDateTime           lastUpdate;
     QDateTime           lastSend;
@@ -42,7 +48,8 @@ private:
     DataVecDouble<3>    distSensor;
     DataVecInt<8>       lightSensor;
 
-    socket              socket;
+    QTcpServer          *socket;
+    QTcpSocket          *clientSocket;
 };
 
 #endif // !ROBOTSIM__ROBOTSIM_H
