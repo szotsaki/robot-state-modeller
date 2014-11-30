@@ -27,6 +27,11 @@ RobotSim::RobotSim()
     if (!socket->listen(QHostAddress::Any, 9999))
     {
         assert(0 || "Cannot open listen socket.");
+        std::cerr << "Simulator failed to open socket.\n";
+    }
+    else
+    {
+        std::cerr << "Simulator up and waiting connection.\n";
     }
 }
 
@@ -35,7 +40,7 @@ void RobotSim::Do_a_Step()
     if (!clientSocket)
     {
         clientSocket = socket->nextPendingConnection();
-        if (clientSocket) std::cout << "Monitor connected.\n";
+        if (clientSocket) std::cerr << "Monitor connected.\n";
     }
     receive();
 
