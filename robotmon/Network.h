@@ -22,6 +22,7 @@ public:
 
 signals:
     void errorOccurred(const QString&);
+    void readyRead();
 
 private:
     QTcpSocket socket;

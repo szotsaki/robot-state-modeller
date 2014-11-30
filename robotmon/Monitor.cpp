@@ -5,6 +5,8 @@ Monitor::Monitor() :
     blockSize(0)
 {
     connect(&network, &Network::errorOccurred, this, &Monitor::errorOccurred);
+    connect(&network, &Network::readyRead, this, &Monitor::receive);
+
     network.connect();
 }
 

@@ -5,6 +5,7 @@ Network::Network()
       sendStream(&sendArray, QIODevice::WriteOnly)
 {
     QObject::connect(&socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleError(QAbstractSocket::SocketError)));
+    QObject::connect(&socket, SIGNAL(readyRead()), this, SIGNAL(readyRead()));
 }
 
 bool Network::connected() const
