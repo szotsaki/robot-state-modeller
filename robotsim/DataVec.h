@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <QDataStream>
 #include "DataCommon.h"
+#include "Random.h"
 
 /**
  * Represents a readable 32bit integer array data of the robot simulator.

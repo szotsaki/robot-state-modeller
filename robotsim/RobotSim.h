@@ -20,7 +20,7 @@ class RobotSim : public QObject
 public:
     RobotSim();
 
-    void        Do_a_Step();
+    void        		Do_a_Step();
 
 private:
     typedef RobotSim    _MyT;

@@ -31,7 +31,7 @@ RobotSim::RobotSim()
 
 void RobotSim::Do_a_Step()
 {
-    if (!clientSocket) accept();
+    if (!clientSocket) clientSocket = socket->nextPendingConnection();
     receive();
 
     QDateTime actual = QDateTime::currentDateTime();
@@ -84,25 +84,31 @@ void RobotSim::send()
 
 void RobotSim::receive()
 {
-    int recvCount = 5;
-    while (recvCount && hasPendingBytes)
+    if (clientSocket)
     {
-        // Actual receive logic.
-        int nextCmdSize = peekInteger(); // Peek only, do not read.
-        if (pendingBytes < nextCmdSize)
+        int recvCount = 5;
+        QDataStream inStream(clientSocket);
+        while (recvCount
+               && clientSocket->bytesAvailable() > (int)sizeof(int32_t))
         {
-            break;
+            // Actual receive logic.
+            int32_t nextCmdSize;
+            clientSocket->peek((char *)&nextCmdSize, sizeof(nextCmdSize));
+            if (clientSocket->bytesAvailable() < nextCmdSize)
+            {
+                break;
+            }
+            inStream >> nextCmdSize;
+            processRecvData(inStream);
+            --recvCount;
         }
-        readInteger();
-        buffer = readBytes(nextCmdSize);
-        processRecvData(buffer);
-        --recvCount;
     }
 }
 
 void RobotSim::processRecvData(QDataStream &inStream)
 {
-    int32_t type = readInteger();
+    int32_t type;
+    inStream >> type;
     switch (type)
     {
     case kD_Sync:
