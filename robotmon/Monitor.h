@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "QCustomPlot.h"
 #include "DataContainer.h"
 #include "Network.h"
 #include "ValueWrapper.h"
@@ -20,7 +21,12 @@ public:
     // UI-related functions.
     std::string getDataIdText(const dataId_t dataId) const;
     std::string getDataValueText(const dataId_t dataId) const;
-    void drawTimeChart(const dataId_t dataId);
+    /**
+     * Display data in a time chart diagram.
+     * @param dataId	 Data to display.
+     * @param customPlot Plot to draw on. Draws to the graph with 0 index.
+     */
+    void drawTimeChart(const dataId_t dataId, QCustomPlot *customPlot);
     void drawBarChart(const dataId_t dataId);
 
     // Query data identifiers.

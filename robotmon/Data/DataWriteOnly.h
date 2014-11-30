@@ -27,7 +27,7 @@ public:
     virtual void updateCommand() override;
 
     virtual std::string getValueText() const { return std::string(); }
-    virtual void drawTimeChart() const;
+    virtual void drawTimeChart(QCustomPlot *customPlot) const;
     virtual void drawBarChart() const;
 };
 
@@ -60,7 +60,7 @@ inline void DataWriteOnly<T>::updateCommand()
 }
 
 template<typename T>
-inline void DataWriteOnly<T>::drawTimeChart() const
+inline void DataWriteOnly<T>::drawTimeChart(QCustomPlot *) const
 {
     // No states, nothing to do.
 }

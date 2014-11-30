@@ -1,6 +1,7 @@
 #ifndef DATA_RW_H_
 #define DATA_RW_H_
 
+#include <algorithm>
 #include <sstream>
 #include <QDataStream>
 
@@ -17,6 +18,7 @@
 template<typename T>
 class DataRw : public DataInterface
 {
+    typedef State< T >  _MyState;
 
 public:
     Command<T> command;
@@ -29,7 +31,7 @@ public:
     virtual void updateCommand() override;
 
     virtual std::string getValueText() const;
-    virtual void drawTimeChart() const;
+    virtual void drawTimeChart(QCustomPlot *customPlot) const;
     virtual void drawBarChart() const;
 };
 
@@ -77,9 +79,24 @@ inline std::string DataRw<T>::getValueText() const
 }
 
 template<typename T>
-inline void DataRw<T>::drawTimeChart() const
+inline void DataRw<T>::drawTimeChart(QCustomPlot *customPlot) const
 {
-    // TODO
+    QVector<double> x(states.size());
+    QVector<double> y(states.size());
+    double minY = std::numeric_limits<double>::max();
+    double maxY = -minY;
+    for (int i = 0; i < states.size(); ++i)
+    {
+        x[i] = static_cast<double>(i);	// TODO: time
+        y[i] = static_cast<double>(states[i].getValue());
+        maxY = std::max(y[i], maxY);
+        minY = std::min(y[i], minY);
+    }
+    customPlot->graph(0)->setData(x, y);
+    // Set axes ranges.
+    customPlot->xAxis->setRange(0, states.size());
+    customPlot->yAxis->setRange(minY, maxY);
+    customPlot->replot();
 }
 
 template<typename T>

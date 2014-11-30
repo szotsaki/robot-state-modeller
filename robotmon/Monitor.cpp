@@ -38,9 +38,9 @@ void Monitor::drawBarChart(const dataId_t dataId)
     dataContainer.drawBarChart(dataId);
 }
 
-void Monitor::drawTimeChart(const dataId_t dataId)
+void Monitor::drawTimeChart(const dataId_t dataId, QCustomPlot *customPlot)
 {
-    dataContainer.drawTimeChart(dataId);
+    dataContainer.drawTimeChart(dataId, customPlot);
 }
 
 std::string Monitor::getDataIdText(const dataId_t dataId) const

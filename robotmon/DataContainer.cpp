@@ -57,9 +57,12 @@ std::string DataContainer::getDataValueText(const dataId_t dataId) const
     return data[dataId]->getValueText();
 }
 
-void DataContainer::drawTimeChart(const dataId_t dataId) const
+void DataContainer::drawTimeChart(const dataId_t dataId,
+                                  QCustomPlot *customPlot) const
 {
-    data[dataId]->drawTimeChart();
+    customPlot->xAxis->setLabel("time");
+    customPlot->yAxis->setLabel(dataIdTexts[dataId].c_str());
+    data[dataId]->drawTimeChart(customPlot);
 }
 
 void DataContainer::drawBarChart(const dataId_t dataId) const
