@@ -14,6 +14,8 @@ class Monitor : public QObject
 
 public:
 
+    Monitor();
+
     // Network-related functions.
     void receive();
     void send(const dataId_t dataId, const ValueWrapper &value);
@@ -42,6 +44,7 @@ signals:
 private:
     DataContainer dataContainer;
     Network network;
+    qint32 blockSize;
 
     void drawTimeChart(const dataId_t dataId, QCustomPlot *customPlot);
     void drawBarChart(const dataId_t dataId, QCustomPlot *customPlot);

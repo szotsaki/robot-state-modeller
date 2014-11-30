@@ -1,16 +1,42 @@
 #include "Monitor.h"
 #include "ValueWrapperFactory.h"
 
+Monitor::Monitor() :
+    blockSize(0)
+{
+    connect(&network, &Network::errorOccurred, this, &Monitor::errorOccurred);
+}
+
 void Monitor::receive()
 {
     QDataStream &inStream = network.getReceiveStream();
-    // get msg size
-    // while (inStream.available >= msg size)
-    while (inStream.status() == QDataStream::Ok)
-    {
-        dataId_t dataId;
-        inStream >> dataId;
-        dataContainer.receive(dataId, inStream);
+    QTcpSocket *socket = static_cast<QTcpSocket *>(inStream.device());
+
+    // It's a new block
+    if (blockSize == 0) {
+        // There's not enough bytes arrived to determine the size
+        if (socket->bytesAvailable() < (int) sizeof(qint32)) {
+            return;
+        }
+
+        // Computing blockSize
+        inStream >> blockSize;
+    }
+
+    if (socket->bytesAvailable() < (int) (blockSize - sizeof(qint32))) {
+        return;
+    }
+
+    // Process the received data
+    dataId_t dataId;
+    inStream >> dataId;
+    dataContainer.receive(dataId, inStream);
+    emit newValueReceived(dataId);
+
+    // Maybe we got the first bytes of a next packet
+    blockSize = 0;
+    if (socket->bytesAvailable() > 0) {
+        receive();
     }
 }
 

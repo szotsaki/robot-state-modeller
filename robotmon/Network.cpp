@@ -24,6 +24,8 @@ QDataStream & Network::getReceiveStream()
 void Network::connect()
 {
     socket.connectToHost("localhost", 9999);
+
+//    connect(&socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleError(QAbstractSocket::SocketError)));
 }
 
 void Network::disconnect()
@@ -34,6 +36,12 @@ void Network::disconnect()
 void Network::send()
 {
     socket.write(sendArray);
+}
+
+void Network::handleError(QAbstractSocket::SocketError socketError)
+{
+    Q_UNUSED(socketError)
+    emit this->errorOccurred(socket.errorString());
 }
 
 void Network::onReceive()

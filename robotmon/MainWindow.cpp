@@ -51,9 +51,9 @@ void MainWindow::createSignalSlotConnections()
     connect(&monitor, &Monitor::newValueReceived, this, newValueReceived1);
     const auto newValueReceived2 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram2, ui->plot2);};
     connect(&monitor, &Monitor::newValueReceived, this, newValueReceived2);
-    const auto newValueReceived3 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram3, ui->plot4);};
+    const auto newValueReceived3 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram3, ui->plot3);};
     connect(&monitor, &Monitor::newValueReceived, this, newValueReceived3);
-    const auto newValueReceived4 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram3, ui->plot4);};
+    const auto newValueReceived4 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram4, ui->plot4);};
     connect(&monitor, &Monitor::newValueReceived, this, newValueReceived4);
 }
 
