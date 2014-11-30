@@ -16,7 +16,6 @@ TEMPLATE = app
 
 SOURCES  += \
     Data.cpp \
-    DataVec.cpp \
     Main.cpp \
     RobotSim.cpp \
     Sleep.cpp

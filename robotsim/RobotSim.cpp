@@ -13,7 +13,9 @@ RobotSim::RobotSim()
    velocity(kD_Velocity, -8.0, 10.0, 0.0, 0.2),
    acceleration(kD_Accel, -3.0, 5.0, 0.0, 0.1),
    steerAngle(kD_SteerAng, -65.0, 65.0, 0.0, 2.5),
-   ctlSignal(kD_CtlSignal, -100.0, 100.0, 0.0, 20.0)
+   ctlSignal(kD_CtlSignal, -100.0, 100.0, 0.0, 20.0),
+   distSensor(kD_DistSen, 0.1, 50.0, 25.0, 5.0),
+   lightSensor(kD_LightSen, 0, 64, 0, 5)
 {
     lastUpdate = QDateTime::currentDateTime();
     lastSend = lastUpdate;
