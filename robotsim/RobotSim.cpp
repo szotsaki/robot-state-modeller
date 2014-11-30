@@ -86,14 +86,15 @@ void RobotSim::receive()
 {
     if (clientSocket)
     {
-        int recvCount = 5;
+        int recvCount = 10;
         QDataStream inStream(clientSocket);
-        while (recvCount
+        while (recvCount > 0
                && clientSocket->bytesAvailable() > (int)sizeof(int32_t))
         {
             // Actual receive logic.
-            int32_t nextCmdSize;
-            clientSocket->peek((char *)&nextCmdSize, sizeof(nextCmdSize));
+            char buffer[4];
+            clientSocket->peek(buffer, 4);
+            int32_t nextCmdSize = qFromBigEndian<qint32>((uchar *)buffer);
             if (clientSocket->bytesAvailable() < nextCmdSize)
             {
                 break;
