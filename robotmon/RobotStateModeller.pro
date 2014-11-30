@@ -6,10 +6,10 @@
 
 QT       += core gui widgets network printsupport
 
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS +=
 
 *-g++* {
-    QMAKE_CXXFLAGS += -Wall -Wextra -Wpedantic
+    QMAKE_CXXFLAGS += -std=c++11 -Wall -Wextra -Wpedantic
 }
 
 TARGET = RobotStateModeller
