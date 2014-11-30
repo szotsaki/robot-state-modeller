@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <math.h>
+#include <QtNetwork>
 
 const int RobotSim::kUpdateDiffMs = 50;
 const int RobotSim::kSendDiffMs = 100;
@@ -15,15 +16,22 @@ RobotSim::RobotSim()
    steerAngle(kD_SteerAng, -65.0, 65.0, 0.0, 2.5),
    ctlSignal(kD_CtlSignal, -100.0, 100.0, 0.0, 20.0),
    distSensor(kD_DistSen, 0.1, 50.0, 25.0, 5.0),
-   lightSensor(kD_LightSen, 0, 64, 0)
+   lightSensor(kD_LightSen, 0, 64, 0),
+   clientSocket(NULL)
 {
     lastUpdate = QDateTime::currentDateTime();
     lastSend = lastUpdate;
+
+    socket = new QTcpServer(this);
+    if (!socket->listen())
+    {
+        assert(0 || "Cannot open listen socket.");
+    }
 }
 
 void RobotSim::Do_a_Step()
 {
-    if (socket.hasNoConn()) accept();
+    if (!clientSocket) accept();
     receive();
 
     QDateTime actual = QDateTime::currentDateTime();
@@ -55,17 +63,23 @@ void RobotSim::update()
 
 void RobotSim::send()
 {
-    state.write(needSync);
-    velocity.write(needSync);
-    acceleration.write(needSync);
-    steerAngle.write(needSync);
-    distSensor.write(needSync);
-    lightSensor.write(needSync);
-    if (!buffer.empty())
+    if (clientSocket)
     {
-        send(buffer);
+        QByteArray buffer;
+        QDataStream outStream(&buffer, QIODevice::WriteOnly);
+
+        state.write(outStream, needSync);
+        velocity.write(outStream, needSync);
+        acceleration.write(outStream, needSync);
+        steerAngle.write(outStream, needSync);
+        distSensor.write(outStream, needSync);
+        lightSensor.write(outStream, needSync);
+        if (buffer.size() > 0)
+        {
+            clientSocket->write(buffer);
+        }
+        needSync = false;
     }
-    needSync = false;
 }
 
 void RobotSim::receive()
@@ -86,7 +100,7 @@ void RobotSim::receive()
     }
 }
 
-void RobotSim::processRecvData(const char *buffer)
+void RobotSim::processRecvData(QDataStream &inStream)
 {
     int32_t type = readInteger();
     switch (type)
@@ -103,19 +117,19 @@ void RobotSim::processRecvData(const char *buffer)
         break;
     case kD_Velocity:
         estop = false;
-        velocity.read();
+        velocity.read(inStream);
         break;
     case kD_Accel:
         estop = false;
-        acceleration.read();
+        acceleration.read(inStream);
         break;
     case kD_SteerAng:
         estop = false;
-        steerAngle.read();
+        steerAngle.read(inStream);
         break;
     case kD_SmState:
         estop = false;
-        state.read();
+        state.read(inStream);
         break;
     default:
         assert(0 && "Unknown data id received.");

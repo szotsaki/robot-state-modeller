@@ -3,6 +3,7 @@
 
 #include <array>
 #include <stdint.h>
+#include <QDataStream>
 #include "DataCommon.h"
 
 /**
@@ -18,7 +19,7 @@ public:
                const int32_t init);
 
     void    update(const bool estop);
-    void    write(const bool needSync);
+    void    write(QDataStream &outStream, const bool needSync);
 
 private:
     const dataId_t  dataId;
@@ -44,7 +45,7 @@ public:
                   const double maxDiff);
 
     void    update(const bool estop);
-    void    write(const bool needSync);
+    void    write(QDataStream &outStream, const bool needSync);
 
 private:
     const dataId_t  dataId;
@@ -88,16 +89,16 @@ void DataVecInt<n>::update(const bool estop)
 }
 
 template <size_t n>
-void DataVecInt<n>::write(const bool needSync)
+void DataVecInt<n>::write(QDataStream &outStream, const bool needSync)
 {
     if (needSync || actual != lastSent)
     {
-        int size = 8 + n*4;
-        writeInteger(size);
-        writeInteger(dataId);
+        int32_t size = 8 + n*4;
+        outStream << size;
+        outStream << (int32_t)dataId;
         for (size_t i = 0; i < n; ++i)
         {
-            writeInteger(actual[i]);
+            outStream << actual[i];
         }
         lastSent = actual;
     }
@@ -139,19 +140,20 @@ void DataVecDouble<n>::update(const bool estop)
 }
 
 template <size_t n>
-void DataVecDouble<n>::write(const bool needSync)
+void DataVecDouble<n>::write(QDataStream &outStream, const bool needSync)
 {
     if (needSync || actual != lastSent)
     {
         int size = 8 + n*8;
-        writeInteger(size);
-        writeInteger(dataId);
+        outStream << size;
+        outStream << (int32_t)dataId;
         for (size_t i = 0; i < n; ++i)
         {
-            writeDouble(actual[i]);
+            outStream << actual[i];
         }
         lastSent = actual;
     }
 }
 
 #endif // !ROBOTSIM__DATAVEC_H
+
