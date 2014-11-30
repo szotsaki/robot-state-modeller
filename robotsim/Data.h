@@ -2,6 +2,7 @@
 #define ROBOTSIM__DATA_H
 
 #include <array>
+#include <inttypes.h>
 
 typedef enum
 {
@@ -16,6 +17,9 @@ typedef enum
     kD_CtlSignal
 } dataId_t;
 
+/**
+ * Represents a readable+writable 32bit integer data of the robot simulator.
+ */
 class DataInt
 {
 public:
@@ -40,6 +44,10 @@ private:
     bool            hasCmd;
 };
 
+/**
+ * Represents a readable+writable 64bit floating point data of the robot
+ * simulator.
+ */
 class DataDouble
 {
 public:
@@ -52,6 +60,7 @@ public:
     void    update(const bool estop);
     void    write(const bool needSync);
     void    read();
+    void    setEstop();
 
 private:
     double  clampMaxAbs(const double d, const double dMaxAbs);

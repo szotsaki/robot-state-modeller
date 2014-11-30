@@ -118,10 +118,10 @@ void RobotSim::processRecvData(const char *buffer)
         break;
     case kD_Estop:
         estop = true;
-        velocity.goal = 0.0;
-        acceleration.goal = 0.0;
-        steerAngle.goal = 0.0;
-        ctlSignal.goal = 0.0;
+        velocity.setEstop();
+        acceleration.setEstop();
+        steerAngle.setEstop();
+        ctlSignal.setEstop();
         break;
     case kD_Velocity:
         estop = false;

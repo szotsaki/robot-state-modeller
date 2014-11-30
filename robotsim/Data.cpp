@@ -96,6 +96,11 @@ void DataDouble::write(const bool needSync)
     }
 }
 
+void DataDouble::setEstop()
+{
+    goal = 0.0;
+}
+
 double DataDouble::clamp(const double d, const double dMin, const double dMax)
 {
     return std::min(dMax, std::max(dMin, d));
