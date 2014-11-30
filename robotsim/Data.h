@@ -1,7 +1,7 @@
 #ifndef ROBOTSIM__DATA_H
 #define ROBOTSIM__DATA_H
 
-#include <inttypes.h>
+#include <stdint.h>
 #include "DataCommon.h"
 
 /**

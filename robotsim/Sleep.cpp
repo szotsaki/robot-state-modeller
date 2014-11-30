@@ -1,11 +1,13 @@
 #include "Sleep.h"
+#include <assert.h>
+#include <QtGlobal>
 #ifdef Q_OS_WIN
 #include <windows.h>
 #endif
 
 void r_sleepMs(const int ms)
 {
-    QTEST_ASSERT(ms > 0);
+    assert(ms > 0);
 
 #ifdef Q_OS_WIN
     Sleep(uint(ms));

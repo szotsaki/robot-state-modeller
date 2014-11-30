@@ -1,8 +1,6 @@
 #ifndef ROBOTSIM__ROBOTSIM_H
 #define ROBOTSIM__ROBOTSIM_H
 
-#include <inttypes.h>
-#include <vector>
 #include <QDateTime>
 #include "Data.h"
 #include "DataVec.h"
@@ -28,12 +26,6 @@ private:
     void                send();
     void                receive();
 
-    void                resetDataVec(std::vector<int32_t> *w_data,
-                                     const size_t n,
-                                     const int32_t value);
-    void                resetDataVec(std::vector<double> *w_data,
-                                     const size_t n,
-                                     const double value);
     void                processRecvData(const char *buffer);
 
     QDateTime           lastUpdate;
@@ -54,4 +46,3 @@ private:
 };
 
 #endif // !ROBOTSIM__ROBOTSIM_H
-

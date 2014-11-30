@@ -2,7 +2,7 @@
 #define ROBOTSIM__DATAVEC_H
 
 #include <array>
-#include <inttypes.h>
+#include <stdint.h>
 #include "DataCommon.h"
 
 /**
@@ -76,9 +76,9 @@ void DataVecInt<n>::update(const bool estop)
 {
     for (size_t i = 0; i < n; ++i)
     {
-        if (!estop && rand(ROB_RP_CHANGE_GOAL) == 0)
+        if (!estop && Random::getRand(0, ROB_RP_CHANGE_GOAL) == 0)
         {
-            goal[i] = rand(minValue, maxValue);
+            goal[i] = Random::getRand(minValue, maxValue);
         }
         if (actual[i] != goal[i])
         {
@@ -104,11 +104,11 @@ void DataVecInt<n>::write(const bool needSync)
 }
 
 template <size_t n>
-DataVecDouble::DataVecDouble(const dataId_t id,
-                             const double minVal,
-                             const double maxVal,
-                             const double init,
-                             const double maxDiff)
+DataVecDouble<n>::DataVecDouble(const dataId_t id,
+                                const double minVal,
+                                const double maxVal,
+                                const double init,
+                                const double maxDiff)
     : dataId(id),
       minValue(minVal),
       maxValue(maxVal),
@@ -121,13 +121,13 @@ DataVecDouble::DataVecDouble(const dataId_t id,
 }
 
 template <size_t n>
-void DataDouble::update(const bool estop)
+void DataVecDouble<n>::update(const bool estop)
 {
     for (size_t i = 0; i < n; ++i)
     {
-        if (!estop && rand(ROB_RP_CHANGE_GOAL) == 0)
+        if (!estop && Random::getRand(0, ROB_RP_CHANGE_GOAL) == 0)
         {
-            goal[i] = rand(minValue, maxValue);
+            goal[i] = Random::getRand(minValue, maxValue);
         }
         if (actual[i] != goal[i])
         {
@@ -139,7 +139,7 @@ void DataDouble::update(const bool estop)
 }
 
 template <size_t n>
-void DataDouble::write(const bool needSync)
+void DataVecDouble<n>::write(const bool needSync)
 {
     if (needSync || actual != lastSent)
     {
@@ -155,4 +155,3 @@ void DataDouble::write(const bool needSync)
 }
 
 #endif // !ROBOTSIM__DATAVEC_H
-
