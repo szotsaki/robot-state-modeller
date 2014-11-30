@@ -23,7 +23,7 @@ RobotSim::RobotSim()
     lastSend = lastUpdate;
 
     socket = new QTcpServer(this);
-    if (!socket->listen())
+    if (!socket->listen(QHostAddress::Any, 9999))
     {
         assert(0 || "Cannot open listen socket.");
     }
