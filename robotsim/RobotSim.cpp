@@ -47,10 +47,10 @@ void RobotSim::update()
     state.update(estop);
     velocity.update(estop);
     acceleration.update(estop);
-    ctlSigna.update(estop);
-    steerAngl.update(estop);
+    ctlSignal.update(estop);
+    steerAngle.update(estop);
     distSensor.update(estop);
-    lightSensor(estop);
+    lightSensor.update(estop);
 }
 
 void RobotSim::send()
