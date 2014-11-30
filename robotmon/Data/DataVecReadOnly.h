@@ -24,6 +24,8 @@ class DataVecReadOnly : public DataInterface
 public:
     QCircularBuffer< _MyState > states;
 
+    DataVecReadOnly();
+
     virtual void setCommand(const ValueWrapper &value);
     virtual void sendCommand(QDataStream &outStream,
                              const bool onlyInProgress = false) override;
@@ -34,6 +36,12 @@ public:
     virtual void drawTimeChart(QCustomPlot *customPlot) const;
     virtual void drawBarChart(QCustomPlot *customPlot) const;
 };
+
+template<typename T>
+inline DataVecReadOnly<T>::DataVecReadOnly()
+{
+    states.setCapacity(ROB_MON_DATA_SIZE);
+}
 
 template <typename T>
 inline void DataVecReadOnly<T>::setCommand(const ValueWrapper &)

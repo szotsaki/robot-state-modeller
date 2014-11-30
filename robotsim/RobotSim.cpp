@@ -42,6 +42,8 @@ void RobotSim::Do_a_Step()
     {
         clientSocket = socket->nextPendingConnection();
         if (clientSocket) qDebug() << "Monitor connected.\n";
+        connect(clientSocket, SIGNAL(disconnected()),
+                clientSocket, SLOT(deleteLater()));
     }
     receive();
 

@@ -24,6 +24,8 @@ public:
     Command<T> command;
     QCircularBuffer< State<T> > states;
 
+    DataRw();
+
     virtual void setCommand(const ValueWrapper &value);
     virtual void sendCommand(QDataStream &outStream,
                              const bool onlyInProgress = false) override;
@@ -34,6 +36,12 @@ public:
     virtual void drawTimeChart(QCustomPlot *customPlot) const;
     virtual void drawBarChart(QCustomPlot *customPlot) const;
 };
+
+template<typename T>
+inline DataRw<T>::DataRw()
+{
+    states.setCapacity(ROB_MON_DATA_SIZE);
+}
 
 template<typename T>
 inline void DataRw<T>::setCommand(const ValueWrapper &value)

@@ -6,6 +6,8 @@
 #include "../QCustomPlot.h"
 #include "../ValueWrapper.h"
 
+#define ROB_MON_DATA_SIZE	50
+
 typedef enum
 {
     kDvt_Int32,
