@@ -9,7 +9,8 @@ DataInt::DataInt(const dataId_t id,
       maxValue(maxVal),
       actual(init),
       lastSent(init),
-      goal(init)
+      goal(init),
+      hasCmd(false)
 {
 }
 
@@ -21,7 +22,7 @@ void DataInt::update(const bool estop)
     }
     if (actual != goal)
     {
-        actual!= goal;
+        actual = goal;
         hasCmd = false;
     }
 }
@@ -55,7 +56,8 @@ DataDouble::DataDouble(const dataId_t id,
       maxDiff(maxDiff),
       actual(init),
       lastSent(init),
-      goal(init)
+      goal(init),
+      hasCmd(false)
 {
 }
 
