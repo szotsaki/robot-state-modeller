@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <assert.h>
 #include <math.h>
+#include <iostream>
 #include <QtNetwork>
 
 const int RobotSim::kUpdateDiffMs = 50;
@@ -31,7 +32,11 @@ RobotSim::RobotSim()
 
 void RobotSim::Do_a_Step()
 {
-    if (!clientSocket) clientSocket = socket->nextPendingConnection();
+    if (!clientSocket)
+    {
+        clientSocket = socket->nextPendingConnection();
+        if (clientSocket) std::cout << "Monitor connected.\n";
+    }
     receive();
 
     QDateTime actual = QDateTime::currentDateTime();
