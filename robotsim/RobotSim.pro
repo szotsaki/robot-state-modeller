@@ -15,10 +15,12 @@ TEMPLATE = app
 
 
 SOURCES += Main.cpp\
-    RobotSim.cpp
+    RobotSim.cpp \
+    Sleep.cpp
 
 HEADERS  += \
-    RobotSim.h
+    RobotSim.h \
+    Sleep.h
 
 FORMS    +=
 
