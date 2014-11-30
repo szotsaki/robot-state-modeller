@@ -35,6 +35,7 @@ private:
     Monitor monitor;
 
     void createSignalSlotConnections();
+    void fillDataComboBox(QComboBox *comboBox);
     void addBlankStateRow();
     void deleteStateRow(QHBoxLayout *row);
     void disableValueRefreshing(QLineEdit *valueEdit);
@@ -43,7 +44,8 @@ private:
     void disableValueColor(QLineEdit *valueEdit);
     void activateValueEdit(QLineEdit *valueEdit, QPushButton *pushButton, QLabel *label);
     void deactivateValueEdit(QLineEdit *valueEdit, QPushButton *pushButton, QLabel *label);
-    void newValueReceived(dataId_t receivedDataId, QComboBox *comboBox, QLineEdit *lineEdit);
+    void newValueReceived(const dataId_t receivedDataId, const QComboBox *comboBox, QLineEdit *lineEdit);
+    void newValueReceived(const dataId_t receivedDataId, const QComboBox *comboBox, QCustomPlot *plot);
     void sendNewValue(QComboBox *comboBox, QLineEdit *lineEdit);
 
 private slots:

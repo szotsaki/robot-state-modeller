@@ -12,6 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     createSignalSlotConnections();
     addBlankStateRow();
+
+    fillDataComboBox(ui->comboBoxDiagram1);
+    fillDataComboBox(ui->comboBoxDiagram2);
+    fillDataComboBox(ui->comboBoxDiagram3);
+    fillDataComboBox(ui->comboBoxDiagram4);
 }
 
 MainWindow::~MainWindow()
@@ -40,6 +45,24 @@ void MainWindow::createSignalSlotConnections()
     connect(ui->pushButtonEmergencyStop, &QPushButton::pressed, &monitor, &Monitor::emergencyStop);
     connect(ui->pushButtonSynchronise, &QPushButton::pressed, &monitor, &Monitor::sync);
     connect(ui->pushButtonEraseLog, &QPushButton::pressed, this, &MainWindow::eraseLog);
+
+    const auto newValueReceived1 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram1, ui->plot1);};
+    connect(&monitor, &Monitor::newValueReceived, this, newValueReceived1);
+    const auto newValueReceived2 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram2, ui->plot2);};
+    connect(&monitor, &Monitor::newValueReceived, this, newValueReceived2);
+    const auto newValueReceived3 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram3, ui->plot4);};
+    connect(&monitor, &Monitor::newValueReceived, this, newValueReceived3);
+    const auto newValueReceived4 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram3, ui->plot4);};
+    connect(&monitor, &Monitor::newValueReceived, this, newValueReceived4);
+}
+
+void MainWindow::fillDataComboBox(QComboBox *comboBox)
+{
+    comboBox->addItem("");
+    for (const auto &dataId : monitor.getAllDataIds()) {
+        const QString name = QString::fromStdString(monitor.getDataIdText(dataId));
+        comboBox->addItem(name, QVariant::fromValue(dataId));
+    }
 }
 
 void MainWindow::addBlankStateRow()
@@ -49,11 +72,7 @@ void MainWindow::addBlankStateRow()
 
     // Adding QComboBox
     QComboBox *combobox = new QComboBox;
-    combobox->addItem("");
-    for (const auto &dataId : monitor.getAllDataIds()) {
-        const QString name = QString::fromStdString(monitor.getDataIdText(dataId));
-        combobox->addItem(name, QVariant::fromValue(dataId));
-    }
+    fillDataComboBox(combobox);
 
     // Adding QLineEdit
     QLineEdit *lineEdit = new QLineEdit;
@@ -148,12 +167,20 @@ void MainWindow::deactivateValueEdit(QLineEdit *valueEdit, QPushButton *pushButt
     label->setVisible(false);
 }
 
-void MainWindow::newValueReceived(dataId_t receivedDataId, QComboBox *comboBox, QLineEdit *lineEdit)
+void MainWindow::newValueReceived(const dataId_t receivedDataId, const QComboBox *comboBox, QLineEdit *lineEdit)
 {
     const dataId_t currentDataId = comboBox->currentData().value<dataId_t>();
     if (receivedDataId == currentDataId) {
         const QString newValue = QString::fromStdString(monitor.getDataValueText(currentDataId));
         lineEdit->setText(newValue);
+    }
+}
+
+void MainWindow::newValueReceived(const dataId_t receivedDataId, const QComboBox *comboBox, QCustomPlot *plot)
+{
+    const dataId_t currentDataId = comboBox->currentData().value<dataId_t>();
+    if (receivedDataId == currentDataId) {
+        monitor.drawChart(currentDataId, plot);
     }
 }
 

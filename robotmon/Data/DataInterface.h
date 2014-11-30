@@ -56,6 +56,6 @@ public:
 
     virtual std::string getValueText() const = 0;
     virtual void drawTimeChart(QCustomPlot *customPlot) const = 0;
-    virtual void drawBarChart() const = 0;
+    virtual void drawBarChart(QCustomPlot *customPlot) const = 0;
 };
 #endif // DATA_INTERFACE_H_

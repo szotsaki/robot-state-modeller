@@ -32,7 +32,7 @@ public:
 
     virtual std::string getValueText() const;
     virtual void drawTimeChart(QCustomPlot *customPlot) const;
-    virtual void drawBarChart() const;
+    virtual void drawBarChart(QCustomPlot *customPlot) const;
 };
 
 template<typename T>
@@ -100,8 +100,9 @@ inline void DataRw<T>::drawTimeChart(QCustomPlot *customPlot) const
 }
 
 template<typename T>
-inline void DataRw<T>::drawBarChart() const
+inline void DataRw<T>::drawBarChart(QCustomPlot *customPlot) const
 {
+    Q_UNUSED(customPlot)
     // Cannot draw since state does not contain vector types.
 }
 

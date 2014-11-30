@@ -65,9 +65,9 @@ void DataContainer::drawTimeChart(const dataId_t dataId,
     data[dataId]->drawTimeChart(customPlot);
 }
 
-void DataContainer::drawBarChart(const dataId_t dataId) const
+void DataContainer::drawBarChart(const dataId_t dataId, QCustomPlot *customPlot) const
 {
-    data[dataId]->drawBarChart();
+    data[dataId]->drawBarChart(customPlot);
 }
 
 std::vector<dataId_t> DataContainer::getAllDataIds() const

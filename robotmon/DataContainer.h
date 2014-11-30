@@ -27,7 +27,7 @@ public:
     std::string getDataIdText(const dataId_t dataId) const;
     std::string getDataValueText(const dataId_t dataId) const;
     void drawTimeChart(const dataId_t dataId, QCustomPlot *customPlot) const;
-    void drawBarChart(const dataId_t dataId) const;
+    void drawBarChart(const dataId_t dataId, QCustomPlot *customPlot) const;
 
     // Query data identifiers.
     std::vector< dataId_t > getAllDataIds() const;

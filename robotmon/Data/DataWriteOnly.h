@@ -28,7 +28,7 @@ public:
 
     virtual std::string getValueText() const { return std::string(); }
     virtual void drawTimeChart(QCustomPlot *customPlot) const;
-    virtual void drawBarChart() const;
+    virtual void drawBarChart(QCustomPlot *customPlot) const;
 };
 
 template <typename T>
@@ -60,14 +60,16 @@ inline void DataWriteOnly<T>::updateCommand()
 }
 
 template<typename T>
-inline void DataWriteOnly<T>::drawTimeChart(QCustomPlot *) const
+inline void DataWriteOnly<T>::drawTimeChart(QCustomPlot *customPlot) const
 {
+    Q_UNUSED(customPlot)
     // No states, nothing to do.
 }
 
 template<typename T>
-inline void DataWriteOnly<T>::drawBarChart() const
+inline void DataWriteOnly<T>::drawBarChart(QCustomPlot *customPlot) const
 {
+    Q_UNUSED(customPlot)
     // No states, nothing to do.
 }
 
