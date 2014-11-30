@@ -1,18 +1,13 @@
 #include <QTime>
 #include "Random.h"
 #include "RobotSim.h"
-#include "Sleep.h"
 
-int main(int, char **)
+int main(int argc, char *argv[])
 {
+    QCoreApplication a(argc, argv);
+
     Random::init((uint)QTime::currentTime().msec());
+    RobotSim *r = new RobotSim(&a);
 
-    RobotSim r;
-    while (true)
-    {
-        r.Do_a_Step();
-        r_sleepMs(50);
-    }
-    return 0;
+    return a.exec();
 }
-

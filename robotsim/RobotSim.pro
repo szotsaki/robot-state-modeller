@@ -18,16 +18,14 @@ SOURCES  += \
     Data.cpp \
     Main.cpp \
     Random.cpp \
-    RobotSim.cpp \
-    Sleep.cpp
+    RobotSim.cpp
 
 HEADERS  += \
     Data.h \
     DataCommon.h \
     DataVec.h \
     Random.h \
-    RobotSim.h \
-    Sleep.h
+    RobotSim.h
 
 FORMS    +=
 

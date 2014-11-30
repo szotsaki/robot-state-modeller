@@ -1,15 +1,11 @@
 #include "RobotSim.h"
-#include <algorithm>
-#include <assert.h>
-#include <math.h>
-#include <iostream>
-#include <QtNetwork>
 
 const int RobotSim::kUpdateDiffMs = 50;
 const int RobotSim::kSendDiffMs = 100;
 
-RobotSim::RobotSim()
- : needSync(false),
+RobotSim::RobotSim(QObject *parent)
+ : QObject (parent),
+   needSync(false),
    estop(false),
    state(kD_SmState, 0, 8, 0),
    velocity(kD_Velocity, -8.0, 10.0, 0.0, 0.2),
@@ -18,7 +14,7 @@ RobotSim::RobotSim()
    ctlSignal(kD_CtlSignal, -100.0, 100.0, 0.0, 20.0),
    distSensor(kD_DistSen, 0.1, 50.0, 25.0, 5.0),
    lightSensor(kD_LightSen, 0, 64, 0),
-   clientSocket(NULL)
+   clientSocket(nullptr)
 {
     lastUpdate = QDateTime::currentDateTime();
     lastSend = lastUpdate;
@@ -27,12 +23,17 @@ RobotSim::RobotSim()
     if (!socket->listen(QHostAddress::Any, 9999))
     {
         assert(0 || "Cannot open listen socket.");
-        std::cerr << "Simulator failed to open socket.\n";
+        qWarning() << "Simulator failed to open socket.";
+        qWarning() << socket->errorString();
     }
     else
     {
-        std::cerr << "Simulator up and waiting connection.\n";
+        qWarning() << "Simulator up and waiting connection.\n";
     }
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &RobotSim::Do_a_Step);
+    timer->start(50);
 }
 
 void RobotSim::Do_a_Step()
@@ -40,7 +41,7 @@ void RobotSim::Do_a_Step()
     if (!clientSocket)
     {
         clientSocket = socket->nextPendingConnection();
-        if (clientSocket) std::cerr << "Monitor connected.\n";
+        if (clientSocket) qDebug() << "Monitor connected.\n";
     }
     receive();
 

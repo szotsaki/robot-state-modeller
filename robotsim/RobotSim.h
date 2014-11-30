@@ -1,7 +1,13 @@
 #ifndef ROBOTSIM__ROBOTSIM_H
 #define ROBOTSIM__ROBOTSIM_H
 
+#include <algorithm>
+#include <assert.h>
+#include <math.h>
 #include <QDateTime>
+#include <QtCore>
+#include <QtNetwork>
+
 #include "Data.h"
 #include "DataVec.h"
 
@@ -18,15 +24,16 @@ class RobotSim : public QObject
     Q_OBJECT
 
 public:
-    RobotSim();
+    RobotSim(QObject *parent = 0);
 
-    void        		Do_a_Step();
 
 private:
     typedef RobotSim    _MyT;
 
     static const int    kUpdateDiffMs;
     static const int    kSendDiffMs;
+
+    void        		Do_a_Step();
 
     void                update();
     void                send();
