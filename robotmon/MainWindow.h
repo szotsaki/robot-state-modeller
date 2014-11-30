@@ -38,13 +38,11 @@ private:
     void fillDataComboBox(QComboBox *comboBox);
     void addBlankStateRow();
     void deleteStateRow(QHBoxLayout *row);
-    void disableValueRefreshing(QLineEdit *valueEdit);
-    void enableValueRefreshing(QLineEdit *valueEdit);
     void enableValueColor(QLineEdit *valueEdit);
     void disableValueColor(QLineEdit *valueEdit);
     void activateValueEdit(QLineEdit *valueEdit, QPushButton *pushButton, QLabel *label);
     void deactivateValueEdit(QLineEdit *valueEdit, QPushButton *pushButton, QLabel *label);
-    void newValueReceived(const dataId_t receivedDataId, const QComboBox *comboBox, QLineEdit *lineEdit);
+    void newValueReceived(const dataId_t receivedDataId, const QComboBox *comboBox, QLineEdit *lineEdit, QLabel *label);
     void newValueReceived(const dataId_t receivedDataId, const QComboBox *comboBox, QCustomPlot *plot);
     void sendNewValue(QComboBox *comboBox, QLineEdit *lineEdit);
 

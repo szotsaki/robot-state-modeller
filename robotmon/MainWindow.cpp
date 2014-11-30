@@ -78,6 +78,7 @@ void MainWindow::addBlankStateRow()
     QLineEdit *lineEdit = new QLineEdit;
     lineEdit->setMinimumWidth(110);
     lineEdit->setProperty("managingLayout", QVariant::fromValue(layout));
+    lineEdit->setProperty("activated", false);
 
     // Adding QPushButton
     QPushButton *pushButton = new QPushButton(tr("Send"));
@@ -115,7 +116,7 @@ void MainWindow::addBlankStateRow()
     const auto deleteRow = [this, layout] (int index) {if (index == 0) {this->deleteStateRow(layout);}};
     connect(combobox, currentIndexChanged, this, deleteRow);
 
-    const auto newValueReceived = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, combobox, lineEdit);};
+    const auto newValueReceived = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, combobox, lineEdit, label);};
     connect(&monitor, &Monitor::newValueReceived, this, newValueReceived);
 
     const auto deactivateValueEdit = [=] {this->deactivateValueEdit(lineEdit, pushButton, label);};
@@ -150,7 +151,7 @@ void MainWindow::activateValueEdit(QLineEdit *valueEdit, QPushButton *pushButton
         return;
     }
 
-    disableValueRefreshing(valueEdit);
+    valueEdit->setProperty("activated", true);
     pushButton->setVisible(true);
     label->setText("[" + valueEdit->text() + "]");
     label->setVisible(true);
@@ -162,17 +163,21 @@ void MainWindow::deactivateValueEdit(QLineEdit *valueEdit, QPushButton *pushButt
         return;
     }
 
-    enableValueRefreshing(valueEdit);
+    valueEdit->setProperty("activated", false);
     pushButton->setVisible(false);
     label->setVisible(false);
 }
 
-void MainWindow::newValueReceived(const dataId_t receivedDataId, const QComboBox *comboBox, QLineEdit *lineEdit)
+void MainWindow::newValueReceived(const dataId_t receivedDataId, const QComboBox *comboBox, QLineEdit *lineEdit, QLabel *label)
 {
     const dataId_t currentDataId = comboBox->currentData().value<dataId_t>();
     if (receivedDataId == currentDataId) {
         const QString newValue = QString::fromStdString(monitor.getDataValueText(currentDataId));
-        lineEdit->setText(newValue);
+        if (lineEdit->property("activated") == false) {
+            lineEdit->setText(newValue);
+        } else {
+            label->setText("[" + newValue + "]");
+        }
     }
 }
 
@@ -192,16 +197,6 @@ void MainWindow::sendNewValue(QComboBox *comboBox, QLineEdit *lineEdit)
     const ValueWrapper *wrapper = wrapperFactory.create(dataID, value.toStdString());
     monitor.send(dataID, *wrapper);
     delete wrapper;
-}
-
-void MainWindow::disableValueRefreshing(QLineEdit *valueEdit)
-{
-    valueEdit->blockSignals(true);
-}
-
-void MainWindow::enableValueRefreshing(QLineEdit *valueEdit)
-{
-    valueEdit->blockSignals(false);
 }
 
 void MainWindow::addBlankStateRowByCb(int index)
