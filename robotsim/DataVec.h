@@ -76,9 +76,9 @@ void DataVecInt<n>::update(const bool estop)
 {
     for (size_t i = 0; i < n; ++i)
     {
-        if (!estop && rand(ROB_RP_CHANGE_GOAL) == 0)
+        if (!estop && Random::getRand(0, ROB_RP_CHANGE_GOAL) == 0)
         {
-            goal[i] = rand(minValue, maxValue);
+            goal[i] = Random::getRand(minValue, maxValue);
         }
         if (actual[i] != goal[i])
         {
@@ -125,9 +125,9 @@ void DataVecDouble<n>::update(const bool estop)
 {
     for (size_t i = 0; i < n; ++i)
     {
-        if (!estop && rand(ROB_RP_CHANGE_GOAL) == 0)
+        if (!estop && Random::getRand(0, ROB_RP_CHANGE_GOAL) == 0)
         {
-            goal[i] = rand(minValue, maxValue);
+            goal[i] = Random::getRand(minValue, maxValue);
         }
         if (actual[i] != goal[i])
         {

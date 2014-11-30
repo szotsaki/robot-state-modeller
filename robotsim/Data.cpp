@@ -1,4 +1,5 @@
 #include "Data.h"
+#include "Random.h"
 
 DataInt::DataInt(const dataId_t id,
                  const int32_t minVal,
@@ -16,9 +17,9 @@ DataInt::DataInt(const dataId_t id,
 
 void DataInt::update(const bool estop)
 {
-    if (!hasCmd && !estop && rand(ROB_RP_CHANGE_GOAL) == 0)
+    if (!hasCmd && !estop && Random::getRand(0, ROB_RP_CHANGE_GOAL) == 0)
     {
-        goal = rand(minValue, maxValue);
+        goal = Random::getRand(minValue, maxValue);
     }
     if (actual != goal)
     {
@@ -63,9 +64,9 @@ DataDouble::DataDouble(const dataId_t id,
 
 void DataDouble::update(const bool estop)
 {
-    if (!hasCmd && !estop && rand(ROB_RP_CHANGE_GOAL) == 0)
+    if (!hasCmd && !estop && Random::getRand(0, ROB_RP_CHANGE_GOAL) == 0)
     {
-        goal = rand(minValue, maxValue);
+        goal = Random::getRand(minValue, maxValue);
     }
     if (actual != goal)
     {

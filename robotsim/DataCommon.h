@@ -3,6 +3,9 @@
 
 #include <algorithm>
 
+// Reciprocal probability of goal change per update.
+#define ROB_RP_CHANGE_GOAL	20
+
 typedef enum
 {
     kD_Sync = 0,
