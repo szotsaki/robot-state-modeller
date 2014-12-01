@@ -4,6 +4,7 @@
 #include <array>
 #include <stdint.h>
 #include <QDataStream>
+#include <QVector>
 #include "DataCommon.h"
 #include "Random.h"
 
@@ -97,10 +98,12 @@ void DataVecInt<n>::write(QDataStream &outStream, const bool needSync)
         int32_t size = 8 + n*4;
         outStream << size;
         outStream << (int32_t)dataId;
-        for (size_t i = 0; i < n; ++i)
-        {
-            outStream << actual[i];
-        }
+
+        std::vector<int32_t> auxVector;
+        auxVector.assign(&actual[0], &actual[0] + n);
+        QVector<int32_t> toSend = QVector<int>::fromStdVector(auxVector);
+
+        outStream << toSend;
         lastSent = actual;
     }
 }
@@ -148,10 +151,12 @@ void DataVecDouble<n>::write(QDataStream &outStream, const bool needSync)
         int size = 8 + n*8;
         outStream << size;
         outStream << (int32_t)dataId;
-        for (size_t i = 0; i < n; ++i)
-        {
-            outStream << actual[i];
-        }
+
+        std::vector<double> auxVector;
+        auxVector.assign(&actual[0], &actual[0] + n);
+        QVector<double> toSend = QVector<double>::fromStdVector(auxVector);
+
+        outStream << toSend;
         lastSent = actual;
     }
 }
