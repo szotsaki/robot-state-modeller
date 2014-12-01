@@ -57,6 +57,9 @@ private:
 
     QTcpServer          *socket;
     QTcpSocket          *clientSocket;
+
+private slots:
+    void                deleteSocket();
 };
 
 #endif // !ROBOTSIM__ROBOTSIM_H

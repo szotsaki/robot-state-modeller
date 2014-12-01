@@ -44,7 +44,7 @@ void RobotSim::Do_a_Step()
         if (clientSocket) {
             qDebug() << "Monitor connected.\n";
             if (clientSocket->isOpen()) {
-                connect(clientSocket, SIGNAL(disconnected()), clientSocket, SLOT(deleteLater()));
+                connect(clientSocket, SIGNAL(disconnected()), this, SLOT(deleteSocket()));
             }
         }
     }
@@ -158,5 +158,11 @@ void RobotSim::processRecvData(QDataStream &inStream)
         Q_ASSERT_X(0, "processRecvData", "Unknown data id received: " + type);
         break;
     }
+}
+
+void RobotSim::deleteSocket()
+{
+    clientSocket->deleteLater();;
+    clientSocket = nullptr;
 }
 

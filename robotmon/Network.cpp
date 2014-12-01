@@ -1,8 +1,7 @@
 #include "Network.h"
 
 Network::Network()
-    : receiveStream(&socket),
-      sendStream(&sendArray, QIODevice::WriteOnly)
+    : receiveStream(&socket)
 {
     QObject::connect(&socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(handleError(QAbstractSocket::SocketError)));
     QObject::connect(&socket, SIGNAL(readyRead()), this, SIGNAL(readyRead()));
@@ -35,10 +34,8 @@ void Network::disconnect()
 
 void Network::send()
 {
-    qDebug() << "SendArray" << sendArray.size() << sendArray.toHex();
     socket.write(sendArray);
     sendArray.clear();
-    //sendStream.device()->seek(0);
 }
 
 void Network::handleError(QAbstractSocket::SocketError socketError)

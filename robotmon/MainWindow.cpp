@@ -215,10 +215,9 @@ void MainWindow::syncPressed()
 
 void MainWindow::sendNewValue(QComboBox *comboBox, QLineEdit *lineEdit)
 {
-    const ValueWrapperFactory wrapperFactory;
     const dataId_t dataID = comboBox->currentData().value<dataId_t>();
     const QString value = lineEdit->text();
-    const ValueWrapper *wrapper = wrapperFactory.create(dataID, value.toStdString());
+    const ValueWrapper *wrapper = ValueWrapperFactory::create(dataID, value.toStdString());
     monitor.send(dataID, *wrapper);
     delete wrapper;
 }

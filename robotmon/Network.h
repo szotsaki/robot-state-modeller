@@ -28,8 +28,6 @@ private:
     QTcpSocket socket;
     QDataStream receiveStream;
     QByteArray sendArray;
-	QDataStream sendStream;
-
 
 private slots:
     void onReceive();
