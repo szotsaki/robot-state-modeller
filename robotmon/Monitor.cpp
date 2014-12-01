@@ -45,14 +45,18 @@ void Monitor::receive()
 
 void Monitor::send(const dataId_t dataId, const ValueWrapper &value)
 {
-    dataContainer.sendCommand(dataId, value, network.getSendStream());
+    QDataStream *inStream = network.getSendStream();
+    dataContainer.sendCommand(dataId, value, *inStream);
     network.send();
+    delete inStream;
 }
 
 void Monitor::sync()
 {
-    dataContainer.sync(network.getSendStream());
+    QDataStream *inStream = network.getSendStream();
+    dataContainer.sync(*inStream);
     network.send();
+    delete inStream;
 }
 
 void Monitor::emergencyStop()

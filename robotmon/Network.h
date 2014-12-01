@@ -13,7 +13,7 @@ public:
     Network();
 
     bool connected() const;
-    QDataStream& getSendStream();
+    QDataStream* getSendStream();
     QDataStream& getReceiveStream();
 
     void connect();

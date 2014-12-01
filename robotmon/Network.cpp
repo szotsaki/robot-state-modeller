@@ -13,9 +13,9 @@ bool Network::connected() const
     return socket.state() == QTcpSocket::ConnectedState;
 }
 
-QDataStream & Network::getSendStream()
+QDataStream * Network::getSendStream()
 {
-    return sendStream;
+    return new QDataStream(&sendArray, QIODevice::WriteOnly);
 }
 
 QDataStream & Network::getReceiveStream()
@@ -35,8 +35,10 @@ void Network::disconnect()
 
 void Network::send()
 {
+    qDebug() << "SendArray" << sendArray.size() << sendArray.toHex();
     socket.write(sendArray);
     sendArray.clear();
+    //sendStream.device()->seek(0);
 }
 
 void Network::handleError(QAbstractSocket::SocketError socketError)
