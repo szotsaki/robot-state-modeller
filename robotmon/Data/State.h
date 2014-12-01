@@ -9,8 +9,9 @@ class State
 {
 
 public:
-    T getValue() const;
-	void deserialise(QDataStream& stream);
+    T			getValue() const;
+    QDateTime	getTimestamp() const;
+    void 		deserialise(QDataStream& stream);
 
 private:
     QDateTime timestamp;
@@ -22,6 +23,12 @@ template<typename T>
 inline T State<T>::getValue() const
 {
     return value;
+}
+
+template<typename T>
+inline QDateTime State<T>::getTimestamp() const
+{
+    return timestamp;
 }
 
 template<typename T>

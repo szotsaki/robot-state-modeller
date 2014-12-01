@@ -76,7 +76,7 @@ inline std::string DataVecReadOnly<T>::getValueText() const
     if (!states.empty())
     {
         std::ostringstream oss;
-        _MyVal val = states.at(0).getValue();
+        _MyVal val = states.last().getValue();
         for (T elem : val)
         {
             oss << elem << ',';
@@ -87,16 +87,31 @@ inline std::string DataVecReadOnly<T>::getValueText() const
 }
 
 template<typename T>
-inline void DataVecReadOnly<T>::drawTimeChart(QCustomPlot *customPlot) const
+inline void DataVecReadOnly<T>::drawTimeChart(QCustomPlot *) const
 {
-    Q_UNUSED(customPlot)
     // Cannot draw since state contains vectors.
 }
 
 template<typename T>
 inline void DataVecReadOnly<T>::drawBarChart(QCustomPlot *customPlot) const
 {
-    // TODO
+    // TODO: memory leak
+    customPlot->clearGraphs();
+    customPlot->clearPlottables();
+    QCPBars *myBars = new QCPBars(customPlot->xAxis, customPlot->yAxis);
+    customPlot->addPlottable(myBars);
+    _MyVal val = states.last().getValue();
+    QVector<double> x(val.size());
+    QVector<double> y(val.size());
+    for (int i = 0; i < val.size(); ++i)
+    {
+        x[i] = static_cast<double>(i);
+        y[i] = static_cast<double>(val[i]);
+    }
+    myBars->setData(x, y);
+    // Set axes ranges.
+    customPlot->rescaleAxes();
+    customPlot->replot();
 }
 
 #endif // DATA_VEC_READ_ONLY_H_

@@ -90,29 +90,26 @@ template<typename T>
 inline void DataRw<T>::drawTimeChart(QCustomPlot *customPlot) const
 {
     customPlot->clearGraphs();
+    customPlot->clearPlottables();
     customPlot->addGraph();
     QVector<double> x(states.size());
     QVector<double> y(states.size());
-    double minY = std::numeric_limits<double>::max();
-    double maxY = -minY;
+    qint64 startMs = states[0].getTimestamp().toMSecsSinceEpoch();
     for (int i = 0; i < states.size(); ++i)
     {
-        x[i] = static_cast<double>(i);	// TODO: time
+        qint64 iMs = states[i].getTimestamp().toMSecsSinceEpoch() - startMs;
+        x[i] = static_cast<double>(iMs / 1000.0);
         y[i] = static_cast<double>(states[i].getValue());
-        maxY = std::max(y[i], maxY);
-        minY = std::min(y[i], minY);
     }
     customPlot->graph(0)->setData(x, y);
     // Set axes ranges.
-    customPlot->xAxis->setRange(0, states.size());
-    customPlot->yAxis->setRange(minY, maxY);
+    customPlot->rescaleAxes();
     customPlot->replot();
 }
 
 template<typename T>
-inline void DataRw<T>::drawBarChart(QCustomPlot *customPlot) const
+inline void DataRw<T>::drawBarChart(QCustomPlot *) const
 {
-    Q_UNUSED(customPlot)
     // Cannot draw since state does not contain vector types.
 }
 
