@@ -28,6 +28,7 @@ public:
     std::string getDataValueText(const dataId_t dataId) const;
     void drawTimeChart(const dataId_t dataId, QCustomPlot *customPlot) const;
     void drawBarChart(const dataId_t dataId, QCustomPlot *customPlot) const;
+    bool isReadOnly(const dataId_t dataId) const;
 
     // Query data identifiers.
     std::vector< dataId_t > getAllDataIds() const;

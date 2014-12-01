@@ -98,6 +98,12 @@ void Monitor::drawChart(const dataId_t dataId, QCustomPlot *customPlot)
     }
 }
 
+bool Monitor::isReadOnly(const dataId_t dataId) const
+{
+    return dataContainer.isReadOnly(dataId);
+}
+
+
 std::vector<dataId_t> Monitor::getAllDataIds() const
 {
     return dataContainer.getAllDataIds();

@@ -37,6 +37,11 @@ void DataContainer::sendCommand(const dataId_t dataId,
     sendCommandImpl(dataId, outStream);
 }
 
+bool DataContainer::isReadOnly(const dataId_t dataId) const
+{
+    return data[dataId]->isReadOnly();
+}
+
 void DataContainer::sendCommandImpl(const dataId_t dataId,
                                     QDataStream &outStream)
 {
