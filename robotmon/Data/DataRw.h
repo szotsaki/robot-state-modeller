@@ -80,7 +80,7 @@ inline std::string DataRw<T>::getValueText() const
     if (!states.empty())
     {
         std::ostringstream oss;
-        oss << states.at(0).getValue();
+        oss << states.last().getValue();
         return oss.str();
     }
     return std::string();

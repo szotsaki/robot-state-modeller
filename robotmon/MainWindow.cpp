@@ -55,6 +55,8 @@ void MainWindow::createSignalSlotConnections()
     connect(&monitor, &Monitor::newValueReceived, this, newValueReceived3);
     const auto newValueReceived4 = [=] (dataId_t receivedId) {this->newValueReceived(receivedId, ui->comboBoxDiagram4, ui->plot4);};
     connect(&monitor, &Monitor::newValueReceived, this, newValueReceived4);
+
+    connect(&monitor, SIGNAL(newValueReceived(const dataId_t)), this, SLOT(newValueReceived(const dataId_t)));
 }
 
 void MainWindow::fillDataComboBox(QComboBox *comboBox)
