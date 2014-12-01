@@ -45,25 +45,27 @@ void Monitor::receive()
 
 void Monitor::send(const dataId_t dataId, const ValueWrapper &value)
 {
-    QDataStream *inStream = network.getSendStream();
-    dataContainer.sendCommand(dataId, value, *inStream);
+    QDataStream *outStream = network.getSendStream();
+    dataContainer.sendCommand(dataId, value, *outStream);
     network.send();
-    delete inStream;
+    delete outStream;
 }
 
 void Monitor::sync()
 {
-    QDataStream *inStream = network.getSendStream();
-    dataContainer.sync(*inStream);
+    QDataStream *outStream = network.getSendStream();
+    dataContainer.sync(*outStream);
     network.send();
-    delete inStream;
+    delete outStream;
 }
 
 void Monitor::emergencyStop()
 {
-    ValueWrapper *wrapper = ValueWrapperFactory::create(kD_Estop, "");
-    send(kD_Estop, *wrapper);
-    delete wrapper;
+    QDataStream *outStream = network.getSendStream();
+    *outStream << (int32_t)8;
+    *outStream << (int32_t)kD_Estop;
+    network.send();
+    delete outStream;
 }
 
 void Monitor::drawBarChart(const dataId_t dataId, QCustomPlot *customPlot)

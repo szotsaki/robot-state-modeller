@@ -37,7 +37,8 @@ private:
 
 template<typename T>
 inline Command<T>::Command()
-    : progress(commandProgress_t::kSuccess)
+    : progress(commandProgress_t::kSuccess),
+      value()
 {
 }
 

@@ -30,7 +30,6 @@ private:
     QByteArray sendArray;
 
 private slots:
-    void onReceive();
     void handleError(QAbstractSocket::SocketError socketError);
 
 };
