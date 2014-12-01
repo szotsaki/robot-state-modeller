@@ -55,6 +55,7 @@ public:
                              const bool onlyInProgress = false) = 0;
     virtual void deserialise(QDataStream &inStream) = 0;
     virtual void updateCommand() = 0;
+    virtual bool inProgress() const = 0;
 
     virtual std::string getValueText() const = 0;
     virtual void drawTimeChart(QCustomPlot *customPlot) const = 0;

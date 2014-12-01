@@ -31,6 +31,7 @@ public:
                              const bool onlyInProgress = false) override;
     virtual void deserialise(QDataStream &inStream) override;
     virtual void updateCommand() override;
+    virtual bool inProgress() const { return false; }
 
     virtual std::string getValueText() const;
     virtual void drawTimeChart(QCustomPlot *customPlot) const;

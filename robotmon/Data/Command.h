@@ -24,15 +24,22 @@ class Command
 public:
     commandProgress_t progress;
 
+    Command();
     void setValue(const ValueWrapper &value);
     void serialise(QDataStream &outStream);
     void update(const T &state);
-    bool inProgess();
+    bool inProgess() const;
 
 private:
     T value;
 
 };
+
+template<typename T>
+inline Command<T>::Command()
+    : progress(commandProgress_t::kSuccess)
+{
+}
 
 template<typename T>
 inline void Command<T>::setValue(const ValueWrapper &wrapper)
@@ -58,7 +65,7 @@ inline void Command<T>::update(const T &value)
 }
 
 template<typename T>
-inline bool Command<T>::inProgess()
+inline bool Command<T>::inProgess() const
 {
     return progress == commandProgress_t::kInProgress;
 }

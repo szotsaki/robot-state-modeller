@@ -35,6 +35,7 @@ public:
     std::vector< dataId_t > getBarChartDataIds() const;
 
 private:
+    void sendCommandImpl(const dataId_t dataId, QDataStream &outStream);
     std::array<DataInterface *, kD_NumIds> data;
 
 };

@@ -33,11 +33,17 @@ void DataContainer::sendCommand(const dataId_t dataId,
                                 const ValueWrapper &value,
                                 QDataStream &outStream)
 {
+    data[dataId]->setCommand(value);
+    sendCommandImpl(dataId, outStream);
+}
+
+void DataContainer::sendCommandImpl(const dataId_t dataId,
+                                    QDataStream &outStream)
+{
     const qint64 startPos = outStream.device()->size();
     qint32 msgSize = 0;
     outStream << msgSize;
     outStream << (int32_t)dataId;    // Serialize data identifier.
-    data[dataId]->setCommand(value);
     data[dataId]->sendCommand(outStream, false);
     const qint64 endPos = outStream.device()->size();
     outStream.device()->seek(startPos);
@@ -48,10 +54,15 @@ void DataContainer::sendCommand(const dataId_t dataId,
 
 void DataContainer::sync(QDataStream &outStream)
 {
-    data[kD_Sync]->sendCommand(outStream, false);
-    for (DataInterface *pData : data)
+    outStream << (int32_t)8;
+    outStream << (int32_t)kD_Sync;
+    for (size_t id = 0; id < data.size(); ++id)
     {
-        pData->sendCommand(outStream, true);
+        if (data[id]->inProgress())
+        {
+            dataId_t dataId = static_cast<dataId_t>(id);
+            sendCommandImpl(dataId, outStream);
+        }
     }
 }
 
