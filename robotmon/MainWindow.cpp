@@ -112,7 +112,10 @@ void MainWindow::addBlankStateRow()
     // Connect signals of the row
     connect(combobox, currentIndexChanged, this, &MainWindow::addBlankStateRowByCb);
 
-    const auto comboBoxIndexChanged = [=] {this->comboBoxIndexChanged(combobox, lineEdit);};
+    const auto comboBoxIndexChanged = [=] {
+        this->deactivateValueEdit(lineEdit, pushButton, label);
+        this->comboBoxIndexChanged(combobox, lineEdit);
+    };
     connect(combobox, currentIndexChanged, this, comboBoxIndexChanged);
 
     const auto deleteRow = [this, layout] (int index) {if (index == 0) {this->deleteStateRow(layout);}};
