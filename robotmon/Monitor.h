@@ -22,6 +22,7 @@ public:
     // UI-related functions.
     std::string getDataIdText(const dataId_t dataId) const;
     std::string getDataValueText(const dataId_t dataId) const;
+    bool isReadOnly(const dataId_t dataId) const;
     /**
      * Display data on a diagram.
      * @param dataId	 Data to display.
