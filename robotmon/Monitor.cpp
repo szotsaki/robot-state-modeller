@@ -39,7 +39,7 @@ void Monitor::receive()
     // Maybe we got the first bytes of a next packet
     blockSize = 0;
     if (socket->bytesAvailable() > 0) {
-        receive();
+        QTimer::singleShot(0, this, SLOT(receive()));
     }
 }
 

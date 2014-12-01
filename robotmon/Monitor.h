@@ -17,7 +17,6 @@ public:
     Monitor();
 
     // Network-related functions.
-    void receive();
     void send(const dataId_t dataId, const ValueWrapper &value);
 
     // UI-related functions.
@@ -34,6 +33,7 @@ public:
     std::vector< dataId_t > getAllDataIds() const;
 
 public slots:
+    void receive();
     void sync();
     void emergencyStop();
 
