@@ -109,7 +109,6 @@ void MainWindow::addBlankStateRow()
     const int numLayouts = ui->verticalLayoutStates->count();
     ui->verticalLayoutStates->insertLayout(numLayouts - 1, layout);
 
-
     // Connect signals of the row
     connect(combobox, currentIndexChanged, this, &MainWindow::addBlankStateRowByCb);
 
@@ -224,23 +223,15 @@ void MainWindow::sendNewValue(QComboBox *comboBox, QLineEdit *lineEdit)
 
 void MainWindow::addBlankStateRowByCb(int index)
 {
-    // The first one is always empty
-    if (index == 0) {
-        return;
-    }
-
+    Q_UNUSED(index)
     addBlankStateRow();
 }
 
 void MainWindow::comboBoxIndexChanged(QComboBox *comboBox, QLineEdit *lineEdit)
 {
     // The first one is always empty
-    const int index = comboBox->currentIndex();
-    if (index == 0) {
-        return;
-    }
-
-    lineEdit->setReadOnly(false);
+    const dataId_t dataID = comboBox->currentData().value<dataId_t>();
+    lineEdit->setReadOnly(monitor.isReadOnly(dataID));
 }
 
 void MainWindow::eraseLog()

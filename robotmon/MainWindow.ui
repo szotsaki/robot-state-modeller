@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>999</width>
-    <height>539</height>
+    <width>997</width>
+    <height>537</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,9 +21,6 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QTabWidget" name="tabWidget">
-      <property name="tabPosition">
-       <enum>QTabWidget::South</enum>
-      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -80,8 +77,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>477</width>
-                  <height>376</height>
+                  <width>476</width>
+                  <height>374</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayoutStates">
@@ -274,7 +271,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>999</width>
+     <width>997</width>
      <height>24</height>
     </rect>
    </property>
@@ -288,6 +285,10 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="Icons.qrc">
+     <normaloff>:/icons/application-exit.svgz</normaloff>:/icons/application-exit.svgz</iconset>
+   </property>
    <property name="text">
     <string>&amp;Quit</string>
    </property>

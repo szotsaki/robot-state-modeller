@@ -4,5 +4,6 @@
         <file>icons/draw-eraser.svgz</file>
         <file>icons/process-stop.svgz</file>
         <file>icons/app-icon.svgz</file>
+        <file>icons/application-exit.svgz</file>
     </qresource>
 </RCC>
