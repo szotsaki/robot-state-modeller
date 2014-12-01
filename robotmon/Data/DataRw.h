@@ -89,6 +89,8 @@ inline std::string DataRw<T>::getValueText() const
 template<typename T>
 inline void DataRw<T>::drawTimeChart(QCustomPlot *customPlot) const
 {
+    customPlot->clearGraphs();
+    customPlot->addGraph();
     QVector<double> x(states.size());
     QVector<double> y(states.size());
     double minY = std::numeric_limits<double>::max();
